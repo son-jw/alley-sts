@@ -18,8 +18,13 @@ public class TimeMapperTest {
 	@Setter(onMethod_ = @Autowired)
 	private TimeMapper tm;
 
+//	@Test
+//	public void testGetTime() {
+//		log.info(tm.getTime());
+//	}
+	
 	@Test
-	public void testGetTime() {
-		log.info(tm.getTime());
+	public void testGetTime2() {
+		 log.info("xml ㅇㅣ용 : " + tm.getTime2());
 	}
 }

@@ -15,6 +15,18 @@
 		<level value="info" />
 	</logger>
 	
+	<logger name="jdbc.audit">
+      <level value="fatal" />
+   </logger>
+   
+   <logger name="jdbc.resultset">
+      <level value="warn" />
+   </logger>
+   
+   <logger name="jdbc.connection">
+      <level value="warn" />
+   </logger>
+	
 	<!-- 3rdparty Loggers -->
 	<logger name="org.springframework.core">
 		<level value="info" />
@@ -31,6 +43,18 @@
 	<logger name="org.springframework.web">
 		<level value="info" />
 	</logger>
+	
+	<logger name="jdbc.audit">
+      <level value="fatal" />
+   </logger>
+   
+   <logger name="jdbc.resultset">
+      <level value="warn" />
+   </logger>
+   
+   <logger name="jdbc.connection">
+      <level value="warn" />
+   </logger>
 
 	<!-- Root Logger -->
 	<root>
