@@ -16,9 +16,9 @@
 
 <title>먹거리 - 먹보들의 거리 리뷰: 백종원의 골목 식당</title>
 
-<link rel="stylesheet" media="screen" href="/assets/dist/NewFile.css" />
+<link rel="stylesheet" media="screen" href="../resources/assets/dist/NewFile.css" />
 
-<link rel="shortcut icon" href="/assets/favicon.ico">
+<link rel="shortcut icon" href="../resources/assets/favicon.ico">
 
 
 <header class="Header " data-page="normal">
