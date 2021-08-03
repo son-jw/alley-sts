@@ -1,5 +1,9 @@
 package kr.co.mapper;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
+
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import kr.co.domain.Comm_BoardVO;
+import kr.co.domain.Comm_Criteria;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
@@ -52,10 +57,10 @@ public class CommunityBoardTests {
 //		log.info(board);
 //	}
 	
-	@Test
-	public void testDelete() {
-		log.info("delete cnt: " + cbm.delete(3L));
-	}
+//	@Test
+//	public void testDelete() {
+//		log.info("delete cnt: " + cbm.delete(3L));
+//	}
 	
 //	@Test
 //	public void testUpdate() {
@@ -68,7 +73,16 @@ public class CommunityBoardTests {
 //		int count = cbm.update(cb);
 //		log.info("update cnt :" + count);
 //	}
-	
+	@Test
+	public void testPaging() {
+		Comm_Criteria cri = new Comm_Criteria();
+		cri.setPageNum(1);
+		cri.setAmount(10);
+		
+		List<Comm_BoardVO> list
+		= cbm.getListWithPaging(cri);
+		list.forEach(board -> log.info(board.getBno()));
+	}
 	
 
 }

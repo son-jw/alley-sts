@@ -24,14 +24,13 @@ public class Comm_BoardControllerTests {
 	@Setter(onMethod_ = @Autowired)
 	private WebApplicationContext ctx;
 	private MockMvc mockMvc;
-	
 
 	@Before
 	public void Setup() {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(ctx).build();
-		
+
 	}
-	
+
 //	@Test
 //	public void testList() throws Exception {
 //		log.info(
@@ -77,14 +76,21 @@ public class Comm_BoardControllerTests {
 //		log.info(result);
 //			
 //	}
-	//글 삭제
+	// 글 삭제
+//	@Test
+//	public void testRemove() throws Exception {
+//		String result = mockMvc.perform(MockMvcRequestBuilders.post("/commboard/remove")
+//				.param("bno", "2"))
+//			.andReturn().getModelAndView().getViewName();
+//		
+//		log.info(result);
+//	}
 	@Test
-	public void testRemove() throws Exception {
-		String result = mockMvc.perform(MockMvcRequestBuilders.post("/commboard/remove")
-				.param("bno", "2"))
-			.andReturn().getModelAndView().getViewName();
-		
-		log.info(result);
+	public void testList2() throws Exception {
+		log.info(mockMvc
+				.perform(MockMvcRequestBuilders.get("/commboard/list").param("pageNum", "2").param("amount", "10"))
+				.andReturn().getModelAndView().getModelMap());
+
 	}
 
 }

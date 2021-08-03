@@ -37,9 +37,26 @@
 		set title =#{title},
 		content =#{content},
 		writer =#{writer},
-		updateDate=sysdate
+		updatedate=sysdate
 		where bno =#{bno}
 	</update>
+	
+	<select id="getListWithPaging"
+		resultType="kr.co.domain.Comm_BoardVO">
+      <![CDATA[
+      select bno, title, content, writer, regdate, updatedate 
+      from
+      (
+      select /*+INDEX_DESC(comm_board pk_comm_board) */ 
+      rownum rn, bno, title, content, writer, regdate, 
+      updatedate 
+      from 
+      comm_board 
+      where rownum <= #{pageNum} * #{amount}
+      )
+      where rn > (#{pageNum}-1) * #{amount}
+      ]]>
+	</select>
 	
 	
 	

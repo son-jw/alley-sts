@@ -1,6 +1,8 @@
 package kr.co.domain;
 
+
 import java.sql.Date;
+
 
 import lombok.Data;
 
@@ -12,5 +14,5 @@ public class Comm_BoardVO {
 	private String writer;
 	private Date regdate;
 	private Date updatedate;
-
+	
 }

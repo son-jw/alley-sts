@@ -1,134 +1,86 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!-- jstl core 쓸때 태그에 c 로 표시. -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<!-- jstl fmt 쓸때 위와 같음. fmt : formatter 형식 맞춰서 표시 -->
+<!doctype html>
 <html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<meta name="format-detection" content="telephone=no" />
-<meta name="baidu-site-verification" content="M9qjBhZly2" />
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<meta name="subject" content="백종원의 골목식당: oo골목, 도시 찾기">
-<meta name="description" content="솔직하고 거짓없는 리뷰로 나만의 맛집을 쉽고 빠르게 찾아보세요!">
-<meta name="keywords" content="서울, 부천, 인천, 포방터, 이화여대 , 서대문구">
+<!-- Bootstrap CSS -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+	crossorigin="anonymous">
+<!-- bootsrap js -->
+<script
+	src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+	integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+	integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+	crossorigin="anonymous"></script>
+	
 
-<title>먹거리 - 먹보들의 거리 리뷰: 백종원의 골목 식당</title>
-
-<link rel="stylesheet" media="screen" href="../resources/assets/dist/NewFile.css" />
-
-<link rel="shortcut icon" href="../resources/assets/favicon.ico">
 
 
-<header class="Header " data-page="normal">
-  <a href="/"
-     class="Header__Logo"
-     onclick="trackEvent('CLICK_HEADER_LOGO');">
-    <i class="Header__LogoIcon"></i>
-  </a>
+<title>먹거리 - 먹보들의 거리 리뷰</title>
+<!-- Favicon-->
+<link rel="icon" type="image/x-icon"
+	href="/resources/assets/favicon.ico" />
+</head>
+<body>
+	<!-- navbar -->
+	<!-- icon -->
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="/"> <img
+				src="/resources/assets/favicon.ico" alt="" width="100" height="70"
+				class="d-inline-block align-text-top">
+			</a>
+			<div>
+				<a class="navbar-brand" href="/">먹보들의<br>거리<br>리뷰
+				</a>
+			</div>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav" style="padding-left: 50%;">
+					<li class="nav-item"><a class="nav-link"
+						href="/commboard/list">게시판</a></li>
+					<li class="nav-item"><a class="nav-link" href="#">최근 본 식당</a></li>
+				</ul>
+			</div>
 
-  <div class="Header__SearchBox">
-    <i class="Header__SearchIcon"></i>
-
-    <label class="Header__SearchInputWrap">
-      <input type="text" class="Header__SearchInput" placeholder="지역, 또는 회차" value="" autocomplete="off" maxlength="50"/>
-    </label>
-
-    <button class="Header__SearchInputClearButton">CLEAR</button>
-  </div>
-
-  <ul class="Header__MenuList">
-      <li class="Header__MyMenu">
-        <a href="/MyMenu"
-           class="Header__MenuLink"
-           onclick="trackEvent('CLICK_MY_MENU')">
-          <span class="Header__MenuText">마이메뉴</span>
-        </a>
-      </li>
-
-    <li class="Header__MenuItem">
-      <a href="/alley_reserve"
-         class="Header__MenuLink"
-         onclick="trackEvent('CLICK_ALLEY_RESERVE')">
-        <span class="Header__MenuText">예약하기</span>
-      </a>
-    </li>
-
-    <li class="Header__MenuItem">
-      <a href="/MY_zzim"
-         class="Header__MenuLink"
-         onclick="trackEvent('CLICK_MY_ZZIM')">
-        <span class="Header__MenuText">찜리스트</span>
-      </a>
-    </li>
-  </ul>
-
-  <ul class="Header__IconButtonList">
-    <li class="Header__IconButtonItem only-mobile Header__IconButtonItem--MenuButton">
-      <button class="MenuButton"
-              onclick="trackEvent('CLICK_MENU');">
-        <i class="MenuButton__Icon"></i>
-      </button>
-    </li>
-
-    <li class="Header__IconButtonItem Header__IconButtonItem--UserRestaurantHistory">
-      <button class="UserProfileButton"
-              onclick="trackEvent('CLICK_PROFILE');">
-        <i class="UserProfileButton__Picture"></i>
-        <i class="UserProfileButton__PersonIcon"></i>
-        <span class="UserProfileButton__HistoryCount">0</span>
-      </button>
-    </li>
-
-    <li class="Header__IconButtonItem Header__IconButtonItem--CloseButton Header__IconButtonItem--Hide">
-      <button class="Header__CloseButton"></button>
-    </li>
-  </ul>
-</header>
-
-<div class="KeywordSuggester">
-  <div class="KeywordSuggester__BlackDeem"></div>
-
-  <div class="KeywordSuggester__Container">
-    <nav class="KeywordSuggester__TabNavigation">
-      <ul class="KeywordSuggester__TabList">
-        <li class="KeywordSuggester__TabItem">
-          <div class="KeywordSuggester__TabButton KeywordSuggester__RecommendTabButton"
-               onclick="trackEvent('CLICK_SEARCH_RECOMMEND')"
-               role="button">
-            추천 검색어
-          </div>
-        </li>
-
-        <li class="KeywordSuggester__TabItem">
-          <div class="KeywordSuggester__TabButton KeywordSuggester__PopularTabButton"
-               onclick="trackEvent('CLICK_SEARCH_POPULAR')"
-               role="button">
-            인기 검색어
-          </div>
-        </li>
-
-        <li class="KeywordSuggester__TabItem">
-          <div class="KeywordSuggester__TabButton KeywordSuggester__HistoryTabButton"
-               onclick="trackEvent('CLICK_SEARCH_RECENT')"
-               role="button">
-            최근 검색어
-          </div>
-        </li>
-      </ul>
-    </nav>
-
-    <div class="KeywordSuggester__SuggestKeywordListWrap">
-      <p class="KeywordSuggester__EmptyKeywordMessage">최근 검색어가 없습니다.</p>
-
-      <div class="KeywordSuggester__Footer">
-        <button class="KeywordSuggester__RemoveAllHistoryKeywordButton">
-          x clear all
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-        
+			<!-- searchbar -->
+			<nav class="navbar navbar-light bg-light" style="padding-right: 2%;">
+				<div class="container-fluid">
+					<form class="d-flex">
+						<input class="form-control me-2" type="search"
+							placeholder="지역 또는 식당을 검색해주세요.." aria-label="Search"
+							style="width: 450px; height: 50px; font-size: 20px;">
+						<button class="btn btn-outline-success" type="submit">Search</button>
+					</form>
+				</div>
+			</nav>
+			<!-- nav menu -->
+			<button class="navbar-toggler" type="button"
+				data-bs-toggle="collapse" data-bs-target="#navbarNav"
+				aria-controls="navbarNav" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav" style="padding-right: 30%;">
+					<li class="nav-item"><a class="nav-link" href="#">로그인/회원가입</a>
+					</li>
+					<li class="nav-item"><a class="nav-link" href="#">마이페이지</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	
