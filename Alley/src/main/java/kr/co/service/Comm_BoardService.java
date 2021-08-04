@@ -15,4 +15,6 @@ public interface Comm_BoardService {
 	public boolean remove(Long bno);// delete
 
 	public List<Comm_BoardVO> getList(Comm_Criteria cri);// 목록
+	
+	public int getTotalCount(Comm_Criteria cri);
 }

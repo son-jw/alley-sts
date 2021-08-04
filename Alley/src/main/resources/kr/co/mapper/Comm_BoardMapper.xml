@@ -4,60 +4,95 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.mapper.Comm_BoardMapper">
+	<sql id="cri">
+		<trim prefix="(" suffix=") AND " prefixOverrides="OR">
+			<foreach item="type" collection="typeArr">
+				<trim prefix="OR">
+					<choose>
+						<when test="type=='T'.toString ()">
+							title like '%'||#{keyword}||'%'
+						</when>
+
+						<when test="type=='C'.toString()">
+							content like '%'||#{keyword}||'%'
+						</when>
+						<when test="type=='W'.toString()">
+							writer like '%'||#{keyword}||'%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>
+
 	<select id="getList" resultType="kr.co.domain.Comm_BoardVO">
   	<![CDATA[
-  	select * from comm_board where bno>0
+  	select * from comm_board where bno > 0
   	]]>
 	</select>
-	
+
 	<insert id="insert">
 		insert into comm_board(bno,title,content,writer)
 		values (seq_board.nextval, #{title}, #{content}, #{writer})
 	</insert>
-	
+
 	<insert id="insertSelectKey">
-		<selectKey keyProperty="bno" order="BEFORE" resultType="long">
+		<selectKey keyProperty="bno" order="BEFORE"
+			resultType="long">
 			select seq_board.nextval from dual
 		</selectKey>
 		insert into comm_board(bno, title, content, writer)
-		values (#{bno}, #{title}, #{content}, #{writer})
+		values (#{bno},
+		#{title}, #{content}, #{writer})
 	</insert>
-	
+
 	<select id="read" resultType="kr.co.domain.Comm_BoardVO">
-		select * from comm_board where bno=#{bno}
+		select * from comm_board where
+		bno=#{bno}
 	</select>
-	
-	
+
+
 	<delete id="delete">
 		delete comm_board where bno=#{bno}
 	</delete>
-	
+
 	<update id="update">
 		update comm_board
 		set title =#{title},
-		content =#{content},
+		content
+		=#{content},
 		writer =#{writer},
 		updatedate=sysdate
 		where bno =#{bno}
 	</update>
-	
-	<select id="getListWithPaging"
-		resultType="kr.co.domain.Comm_BoardVO">
-      <![CDATA[
-      select bno, title, content, writer, regdate, updatedate 
-      from
-      (
-      select /*+INDEX_DESC(comm_board pk_comm_board) */ 
-      rownum rn, bno, title, content, writer, regdate, 
-      updatedate 
-      from 
-      comm_board 
-      where rownum <= #{pageNum} * #{amount}
-      )
-      where rn > (#{pageNum}-1) * #{amount}
-      ]]>
+
+	<select id="getListWithPaging" resultType="kr.co.domain.Comm_BoardVO">
+		<![CDATA[
+      	select bno, title, content, writer, regdate, updatedate 
+      	from
+      	(select /*+INDEX_DESC(comm_board pk_comm_board) */ 
+      	rownum rn, bno, title, content, writer, regdate, 
+     	updatedate 
+      	from comm_board 
+      	where 
+      	]]>
+			<include refid="cri" />
+		
+		<![CDATA[
+		rownum <= #{pageNum} * #{amount})
+      	where rn > (#{pageNum}-1) * #{amount}
+		]]>
 	</select>
-	
-	
-	
+
+	<select id="getTotalCount" resultType="int">
+		select count(bno) from comm_board where
+		
+		<include refid="cri" />
+		
+		<![CDATA[
+		bno > 0
+		]]>
+	</select>
+
+
 </mapper>

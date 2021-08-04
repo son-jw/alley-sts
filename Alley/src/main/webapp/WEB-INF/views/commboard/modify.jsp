@@ -17,7 +17,10 @@
 				<form role="form" action="/commboard/modify" method="post">
 
 					<input type="hidden" name="bno" value="${cb.bno }" />
-
+					<input type="hidden" name="pageNum" value="${cri.pageNum }" />
+					<input type="hidden" name="amount" value="${cri.amount }" />
+					<input type="hidden" name= "type" value="${cri.type }">
+					<input type="hidden" name= "keyword" value="${cri.keyword }">
 
 					<div class="form-group">
 						<label>글 제목</label> <input class="form-control" name='title'
@@ -37,9 +40,10 @@
 
 					<button type="submit" data-oper="modify" class="btn btn-success">수정</button>
 
-					<button type="submit" data-oper="delete" class="btn btn-danger">삭제</button>
+					<button type="submit" data-oper="remove" class="btn btn-danger">삭제</button>
 
 					<button type="submit" data-oper="list" class="btn btn-info">목록</button>
+				
 				</form>
 
 			</div>
@@ -54,7 +58,7 @@
 	$(document).ready(function() {
 		/*문서가 준비 됐다면, 아래 함수를 실행함*/
 		var formObj = $("form");
-		$('button').on("click" , function(e) {
+		$('button').on("click",function(e) {
 			/* 버튼이 클릭된다면 아램함수들을 실행하도록, e라는 이베튼 개체를 전달*/
 			e.preventDefault();/* 기본 이벤트(submit) 동작 막기.*/
 			var operation = $(this).data("oper");
@@ -63,11 +67,24 @@
 			/*브라우저 로그로 oper값을 추력*/
 			
 			if (operation==='remove') {
-				formObj.attr("action" , "/commboard/remove");
+				formObj.attr("action","/commboard/remove");
 				/*form에 액션 속성을 modify 에서 remove로 변경*/
 			} else if (operation==='list') {
-				self.location = "/commboard/list"
-				return;
+				formObj.attr("action","/commboard/list")
+						.attr("method","get");
+				
+				var pageNumTag=$("input[name='pageNum']");
+				var amountTag=$("input[name='amount']");
+				var keywordTag=$("input[name='keyword']");
+				var typeTag=$("input[name='type']");
+				
+				
+				formObj.empty();
+				formObj.append(pageNumTag);
+				formObj.append(amountTag);
+				formObj.append(keywordTag);
+				formObj.append(typeTag);
+				
 			}
 			formObj.submit();
 			/*위 조건이 아니라면 수정처리*/

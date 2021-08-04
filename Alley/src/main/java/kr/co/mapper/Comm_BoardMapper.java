@@ -19,4 +19,6 @@ public interface Comm_BoardMapper {
 	public int update(Comm_BoardVO cb); // 수정
 	
 	public List<Comm_BoardVO> getListWithPaging(Comm_Criteria cri);
+	
+	public int getTotalCount(Comm_Criteria cri);
 }

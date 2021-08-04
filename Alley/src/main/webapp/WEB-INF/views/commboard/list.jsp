@@ -23,11 +23,10 @@
 
 			<tr>
 				<td><c:out value="${cb.bno }" /></td>
-				<td><a href="/commboard/get?bno=${cb.bno }">
-					<c:out value="${cb.title }" /></a></td>
+				<td><a href="${cb.bno }" class="move">
+				 	<c:out value="${cb.title }" /></a></td>
 				<td><c:out value="${cb.writer }" /></td>
-				<td><fmt:formatDate pattern="yyyy-MM-dd"
-						value="${cb.regdate }" /></td>
+				<td><fmt:formatDate pattern="yyyy-MM-dd" value="${cb.regdate }" /></td>
 				<td><fmt:formatDate pattern="yyyy-MM-dd"
 						value="${cb.updatedate }" /></td>
 			</tr>
@@ -35,36 +34,86 @@
 	</tbody>
 </table>
 
+<!-- 검색 상자 시작 -->
+	<div>
+		<div class="col-lg-12">
+		
+			<form id="searchForm" action="/commboard/list" method="get">			
+				&nbsp;&nbsp;&nbsp; <select name="type">
+					<option value="" ${pageMaker.cri.type==null?"selected":"" }>
+					--</option>	
+					
+					<option value="T" ${pageMaker.cri.type eq "T"?"selected":"" }>
+					제목</option>
+					
+					
+					<option value="C" ${pageMaker.cri.type eq "C"?"selected":"" }>
+					내용</option>
+					<option value="W" ${pageMaker.cri.type eq "W"?"selected":"" }>
+					작성자</option>
+					
+					<option value="TC" ${pageMaker.cri.type eq "TC"?"selected":"" }>
+					제목+내용</option>
+					<option value="TW" ${pageMaker.cri.type eq "TW"?"selected":"" }>
+					제목+작성자</option>
+					<option value="CW" ${pageMaker.cri.type eq "CW"?"selected":"" }>
+					내용+작성자</option>
+					
+					<option value="TCW" ${pageMaker.cri.type eq "TCW"?"selected":"" }>
+					제목+내용+작성자</option>
+				</select>
+				<input type="text" name="keyword" value="${pageMaker.cri.keyword }" />
+				<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }" />
+				<input type="hidden" name="amount" value="${pageMaker.cri.amount }" />
+				
+				<button class="btn btn-warning">검색</button>
+			</form>
+		</div>
+	</div>
+	<!-- 검색 상자 끝 -->
+		
+	
+	
 <div class="card-header py-3" align="right">
+	<nav aria-label="Page navigation example">
+
+		<ul class="pagination justify-content-center">
+			<c:if test="${pageMaker.prev }">
+				<li class="page-item"><a class="page-link" href="${pageMaker.startPage-1 }"
+					aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+			</c:if>
+
+			<c:forEach var="num" begin="${pageMaker.startPage }"
+				end="${pageMaker.endPage }">
+				<li class='page-item ${pageMaker.cri.pageNum==num?"active":"" }'>
+					<a class="page-link" href="${num }" class="page-link">${num }</a>
+				</li>
+			</c:forEach>
+
+			<c:if test="${pageMaker.next }">
+				<li class="page-item next"><a class="page-link" href="${pageMaker.endPage+1 }"
+					aria-label="Next"> <span aria-hidden="ture">&raquo;</span></a>
+				</li>
+			</c:if>
+
+		</ul>
+	</nav>
+	<form id="actionForm" action="/commboard/list" method="get">
+		<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }">
+		<input type="hidden" name="amount" value="${pageMaker.cri.amount }">
+		
+		<input type="hidden" name="type" value="${pageMaker.cri.type }">
+		<input type="hidden" name="keyword" value="${pageMaker.cri.keyword }">
+			
+	</form>
 	<button id="regBtn" style="color: green;">글 쓰기</button>
 </div>
-
-
-
-<!-- pagination -->
-<nav aria-label="Page navigation example">
-	<ul class="pagination">
-		<li class="page-item"><a class="page-link" href="#"
-			aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-		</a></li>
-		<li class="page-item"><a class="page-link" href="#">1</a></li>
-		<li class="page-item"><a class="page-link" href="#">2</a></li>
-		<li class="page-item"><a class="page-link" href="#">3</a></li>
-		<li class="page-item"><a class="page-link" href="#"
-			aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-		</a></li>
-	</ul>
-</nav>
-
-
 
 <div class="modal" tabindex="-1" id="myModal">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<div class="modal-header">
-				
-			</div>
-			
+			<div class="modal-header"></div>
+
 			<div class="modal-body"></div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary"
@@ -76,34 +125,78 @@
 </div>
 
 
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.0.min.js" ></script>
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
 <script>
 	$(document).ready(function() {
 		$("#regBtn").on("click", function() {
-			self.location ="/commboard/register";
+			self.location = "/commboard/register";
 			/* 아이디 regBtn 을 클릭한다면
 			현재창의 url 를 쓰기로 변경 */
 		});
 
 		var result = '<c:out value="${result}"/>';//result2
 		// 자바스크립트는 형추론 이용.
-		console.log("result:"+result);
+		console.log("result:" + result);
 		checkModal(result);
 		// 게시물 번호를 매개변수로 전달하면서 checkModal 펑션 호출.
-		
-		function checkModal(result){
-			if(result === ''){
+
+		function checkModal(result) {
+			if (result === '') {
 				// == 는 값만 비교, === 은 값과 형식도 비교.
 				return;
 			}
-			if (parseInt(result) > 0){// 전달된 문자값을 숫자화, 자바의 Integer.parseInt 비슷함.
+			if (parseInt(result) > 0) {// 전달된 문자값을 숫자화, 자바의 Integer.parseInt 비슷함.
 				$(".modal-body").html("게시글" + parseInt(result) + "번이 등록");
 				// 표시할 내용 만들기	
-			}else if (result==="success") {
+			} else if (result === "success") {
 				$(".modal-body").html(result);
 			}
 			$("#myModal").modal("show");// 모달창 표시.
 		}
+		var actionForm = $("#actionForm");
+			// class page-item에 a 링크가 클릭될떄
+			$(".page-item a").on("click", function(e) {
+				e.preventDefault();
+				
+				console.log("click");
+				actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+				actionForm.submit();
+			});
+		$(".move").on("click", function(e){
+			e.preventDefault();
+			
+			actionForm.append("<input type='hidden' name='bno' "
+					+"value='"+$(this).attr("href")+"'>");
+			//액션 폼 요소에 bno 추가하여 클릭한 제목의 bno 전달
+			actionForm.attr("action","/commboard/get");
+			//기존 목록 이동 대신에 글읽기 페이지로 액션을 변경하고
+			//(get으로 변경하여 get 의 script중 bno,page 부분 전달)
+			actionForm.submit();
+			//전송
+		});
+		var searchForm = $("#searchForm");
+		
+		$("#searchForm button").on("click", function(e){
+		
+			if(!searchForm.find("option:selected").val()){
+				alert("검색 종률를 선택하세요.");
+				return false;
+			}
+			if(!searchForm.find("input[name='keyword']").val()){
+			
+					
+				alert("키워드를 입력하세요.");
+				return false;
+			}
+			
+			searchForm.find("input[name='pageNum']").val(1);
+			
+			e.preventDefault();
+			searchForm.submit();
+		});
+		
+		
 		
 	});
 </script>

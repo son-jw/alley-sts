@@ -8,8 +8,12 @@ import lombok.ToString;
 @Setter
 @ToString
 public class Comm_Criteria {
+	// 페이징
 	private int pageNum;
 	private int amount;
+	// 검색 사용시
+	private String type;
+	private String keyword;
 
 	public Comm_Criteria() {
 		this(1, 10);
@@ -18,6 +22,11 @@ public class Comm_Criteria {
 	public Comm_Criteria(int pageNum, int amount) {
 		this.pageNum = pageNum;
 		this.amount = amount;
+	}
+
+	public String[] getTypeArr() {
+		return type == null ? new String[] {} : type.split("");
+		
 	}
 
 }

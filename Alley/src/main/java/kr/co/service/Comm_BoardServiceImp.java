@@ -50,5 +50,11 @@ public class Comm_BoardServiceImp implements Comm_BoardService {
 		//
 		return cbm.getListWithPaging(cri);
 	}
+	@Override
+	public int getTotalCount(Comm_Criteria cri) {
+		log.info("get total count");
+		return cbm.getTotalCount(cri);	
+		
+	}
 
 }

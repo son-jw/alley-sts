@@ -42,8 +42,14 @@
 					
 					<button data-oper="list" class="btn btn-info">목록</button>
 					
-					<form id='operForm' action="/commboard/modify" method="get">
+				<form id='operForm' action="/commboard/modify" method="get">
 					<input type='hidden' id='bno' name='bno' value="${cb.bno }" />
+					<input type='hidden' name="pageNum" value="${cri.pageNum }" />
+					<input type='hidden' name="amount" value="${cri.amount }" />
+					
+					<input type="hidden" name="type" value="${cri.type }" />
+					<input type="hidden" name="keyword" value="${cri.keyword }" />
+					
 				</form>
 				
 			</div>
@@ -61,12 +67,12 @@
 <script>
 	$(document).ready(function(){
 		 var operForm = $("#operForm");/* 문서중 form 요소를 찾앙서 변수에 할당. */
-	      $('button[data-oper="modify"]').on("click", function(e){
+	      $('button[data-oper="modify"]').on("click",function(e){
 	         /* 버튼이 클릭된다면 아래 함수 수행, e라는 이벤트 객체를 전달하면서 */
 	         operForm.attr("action", "/commboard/modify").submit();
 	      });
 	      
-	      $('button[data-oper="list"]').on("click", function(e){
+	      $('button[data-oper="list"]').on("click",function(e){
 	         /* 버튼이 클릭된다면 아래 함수 수행, e라는 이벤트 객체를 전달하면서 */
 	         operForm.find("#bno").remove();
 	         operForm.attr("action", "/commboard/list").submit();
