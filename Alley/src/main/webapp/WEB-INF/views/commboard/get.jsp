@@ -14,44 +14,41 @@
 		<div class="table-responsive">
 			<div class="panel-heading">글 읽기</div>
 			<div class="panel-body">
-				
-					<div class="form-group">
-						게시물 번호<input class="form-control" name="bno"
-							value='<c:out value="${cb.bno }"/>' readonly="readonly">
-					</div>
 
-					<div class="form-group">
-						<label>글 제목</label> <input class="form-control" name='title'
-							value='<c:out value="${cb.title }"/>' readonly="readonly">
-					</div>
+				<div class="form-group">
+					게시물 번호<input class="form-control" name="bno"
+						value='<c:out value="${cb.bno }"/>' readonly="readonly">
+				</div>
 
-					<div class="form-group">
-						<label>내용</label>
-						<textarea class="form-control" rows="3" name='content'
-							readonly="readonly"><c:out
-								value="${cb.content }"/> </textarea>
-					</div>
+				<div class="form-group">
+					<label>글 제목</label> <input class="form-control" name='title'
+						value='<c:out value="${cb.title }"/>' readonly="readonly">
+				</div>
 
-					<div class="form-group">
-						<label>작성자</label> <input class="form-control" name="writer"
-							value='<c:out value="${cb.writer }"/>'
-							readonly="readonly">
-					</div>
+				<div class="form-group">
+					<label>내용</label>
+					<textarea class="form-control" rows="3" name='content'
+						readonly="readonly"><c:out value="${cb.content }" /> </textarea>
+				</div>
 
-					<button data-oper="modify" class="btn btn-warning">수정</button>
-					
-					<button data-oper="list" class="btn btn-info">목록</button>
-					
+				<div class="form-group">
+					<label>작성자</label> <input class="form-control" name="writer"
+						value='<c:out value="${cb.writer }"/>' readonly="readonly">
+				</div>
+
+				<button data-oper="modify" class="btn btn-warning">수정</button>
+
+				<button data-oper="list" class="btn btn-info">목록</button>
+
 				<form id='operForm' action="/commboard/modify" method="get">
-					<input type='hidden' id='bno' name='bno' value="${cb.bno }" />
-					<input type='hidden' name="pageNum" value="${cri.pageNum }" />
-					<input type='hidden' name="amount" value="${cri.amount }" />
-					
-					<input type="hidden" name="type" value="${cri.type }" />
-					<input type="hidden" name="keyword" value="${cri.keyword }" />
-					
+					<input type='hidden' id='bno' name='bno' value="${cb.bno }" /> <input
+						type='hidden' name="pageNum" value="${cri.pageNum }" /> <input
+						type='hidden' name="amount" value="${cri.amount }" /> <input
+						type="hidden" name="type" value="${cri.type }" /> <input
+						type="hidden" name="keyword" value="${cri.keyword }" />
+
 				</form>
-				
+
 			</div>
 		</div>
 	</div>
@@ -59,11 +56,73 @@
 
 </div>
 
+<!-- 댓글 목록 -->
+<br />
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<i class="fa fa-comments fa-fw"></i>Reply
+				<button id="addReplyBtn" class="btn btn-primary bts-xs float-right">
+					새로운 댓글 작성하기</button>
+			</div>
+			<br />
+			<div class="panel-body">
+				<ul class="chat">
+					<li>좋아영</li>
 
-<%@ include file="../includes/footer.jsp"%>
+				</ul>
+			</div>
+			<div class="panel-footer"></div>
+		</div>
+	</div>
+</div>
 
 
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.0.min.js" ></script>
+
+
+
+<!-- 댓글 입력 모달창  -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myModalLabel">댓글 창</h4>
+			</div>
+
+			<div class="modal-body">
+
+				<div class="form-group">
+					<label>댓글</label> <input class="form-control" name="reply"
+						value="새 댓글">
+				</div>
+
+				<div class="form-group">
+					<label>작성자</label> <input class="form-control" name="replyer"
+						value="replyer">
+				</div>
+
+				<div class="form-group">
+					<label>댓글 작성일</label> <input class="form-control" name="replydate"
+						value="">
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button id="modalModBtn" type="button" class="btn btnwarning">수정</button>
+				<button id="modalRemoveBtn" type="button" class="btn btndanger">삭제</button>
+				<button id="modalRegisterBtn" type="button" class="btn btnprimary">등록</button>
+				<button id="modalCloseBtn" type="button" class="btn btndefault">닫기</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<script type="text/javascript" src="/resources/js/reply.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
 <script>
 	$(document).ready(function(){
 		 var operForm = $("#operForm");/* 문서중 form 요소를 찾앙서 변수에 할당. */
@@ -77,6 +136,97 @@
 	         operForm.find("#bno").remove();
 	         operForm.attr("action", "/commboard/list").submit();
 	      });
-	   });
+	      
+	      var bnoValue = '<c:out value = "${cb.bno}" />';
+	      
+	      /* comm_replyService.add({
+	    	  reply : "js.test",
+	    	  repyer : "tester" , 
+	    	  bno : bnoValue
+	      }, function(result) {
+	    	  alert("result:" + result);
+	      }); */
+	      
+	      var modal = $("#myModal");
+	      //댓글용 모달
+	      var modalInputReplyDate = modal.find("input[name='replydate']");
+	      //댓글 작성일 항목.
+	      var modalRegisterBtn = $("#modalRegisterBtn");
+	      var modalInputReply = modal.find("input[name='reply']");
+	      var modalInputReplyer = modal.find("input[name='replyer']");
+	      
+	      $("#addReplyBtn").on("click",function(e) {
+	    	  //댓글쓰기 버튼 클릭시
+	    	  modal.find("input").val("");
+	    	  //모달창의 모든 입력창 초기화
+	    	  modalInputReplyDate.closest("div").hide();
+	    	  //closest : 선택요소와 가장 가까운 요소를 지정
+	    	  modal.find("button[id != 'modalCloseBtn']").hide();
+	    	  //닫기버튼 제외하고 숨김
+	    	  modalRegisterBtn.show();
+	    	  $("#myModal").modal("show");
+	      });
+	      
+	      $("#modalCloseBtn").on("click",function(e) {
+	    	  modal.modal("hide");
+	      });
+	      
+	      modalRegisterBtn.on("click",function(e) {
+	    	  //덧글 등록버튼을 눌렀을때
+	    	  var reply = {
+	    			  reply : modalInputReply.val(),
+	    			  replyer : modalInputReplyer.val(),
+	    			  bno : bnoValue
+	    	  }; //ajax로 전달한 reply 객체 선언 과 할당
+	    	  Comm_ReplyService.add(reply, function(result) {
+	    		  alert(result);
+	    		  modal.find("input").val("");//초기화
+	    		  modal.modal("hide");//숨기기
+	    	  });
+	      });
+	      
+	     /*  replyService.getList({
+	    	  bno : bnoValue,
+	    	  page : 1
+	      },function(list) {
+	    	  for (var i = 0 , len = list.length || 0; i < len; i++) {
+	    		  console.log(list[i]);
+	    	  }
+	      }); */
+	      
+	      var replyUL = $(".chat");
+	      
+	      function showList(page) {
+	    	  Comm_ReplyService.getList({
+	    		  bno : bnoValue,
+	    		  page: page || 1
+	    	  },
+		 	function(list) {
+	    		var str = "";
+	    		if (list == null || list.length ==0) {
+	    		  replyUL.html("");
+	    		  return;
+	    		}
+	    		for (var i=0, len = list.length || 0; i< len; i++) {
+	    			str += "<li class='left ";
+	    			str +="clearfix' data-rno='";
+	    			str +=list[i].rno+"'>";
+	    			str += "<div><div class='header' ";
+	    			str +="><strong class='";
+	    			str +="primary-font'>";
+	    			str += list[i].replyer+ "</strong>";
+	    			str += "<small class='float-sm-right '>";
+	    			str += list[i].replydate + "</small></div>";
+	    			str += "<p>" + list[i].reply;
+	    			str += "</p></div></li>";
+	    		}
+				replyUL.html(str);
+			});
+		}
+	showList(1);
+});// end document ready
 </script>
+
+<%@ include file="../includes/footer.jsp"%>
+
 
