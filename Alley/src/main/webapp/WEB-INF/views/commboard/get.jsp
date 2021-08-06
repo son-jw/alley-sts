@@ -137,21 +137,15 @@
 	         operForm.attr("action", "/commboard/list").submit();
 	      });
 	      
-	      var bnoValue = '<c:out value = "${cb.bno}" />';
-	      
-	      /* comm_replyService.add({
-	    	  reply : "js.test",
-	    	  repyer : "tester" , 
-	    	  bno : bnoValue
-	      }, function(result) {
-	    	  alert("result:" + result);
-	      }); */
-	      
+	      var bnoValue = '<c:out value = "${cb.bno}" />';	      
+	     
 	      var modal = $("#myModal");
 	      //댓글용 모달
 	      var modalInputReplyDate = modal.find("input[name='replydate']");
 	      //댓글 작성일 항목.
 	      var modalRegisterBtn = $("#modalRegisterBtn");
+	      var modalModBtn = $('#modalModBtn');
+	      var modalRemoveBtn = $('#modalRemoveBtn');
 	      var modalInputReply = modal.find("input[name='reply']");
 	      var modalInputReplyer = modal.find("input[name='replyer']");
 	      
@@ -182,17 +176,30 @@
 	    		  alert(result);
 	    		  modal.find("input").val("");//초기화
 	    		  modal.modal("hide");//숨기기
+	    		  showList(-1);
 	    	  });
 	      });
 	      
-	     /*  replyService.getList({
-	    	  bno : bnoValue,
-	    	  page : 1
-	      },function(list) {
-	    	  for (var i = 0 , len = list.length || 0; i < len; i++) {
-	    		  console.log(list[i]);
-	    	  }
-	      }); */
+	      modalModBtn.on("click",function(e) {
+	    	  var reply = {
+	    			  rno : modal.data("rno"),
+	    			  reply : modalInputReply.val()
+	    	  };
+	    	  Comm_ReplyService.update(reply, function(result) {
+	    		  alert(result);
+	    		  modal.modal("hide");
+	    		  showList(-1);
+	    	  });	    	  
+	      });
+	      
+	      modalRemoveBtn.on("click", function(e) {
+	    	  var rno = modal.data("rno");
+	    	  Comm_ReplyService.remove(rno, function(result) {
+	    		  alert(result);
+	    		  modal.modal("hide");
+	    		  showList(-1);
+	    	  });	    	  
+	      });
 	      
 	      var replyUL = $(".chat");
 	      
@@ -216,13 +223,35 @@
 	    			str +="primary-font'>";
 	    			str += list[i].replyer+ "</strong>";
 	    			str += "<small class='float-sm-right '>";
-	    			str += list[i].replydate + "</small></div>";
+	    			str += Comm_ReplyService.displayTime(list[i].replydate) + "</small></div>";
 	    			str += "<p>" + list[i].reply;
 	    			str += "</p></div></li>";
 	    		}
 				replyUL.html(str);
 			});
 		}
+	    $(".chat").on("click","li",function(e) {
+	    	//클래스 caht을 클릭하는데 , 하위요소가 li라면은
+	    	var rno = $(this).data("rno");
+	    	//댓글에 포함된 값등 중에서 rno 를 추출하여 변수를 할당.
+	    	console.log(rno);
+	    	
+	    	Comm_ReplyService.get(rno,function(reply) {
+	    		modalInputReply.val(reply.reply)
+	    		modalInputReplyer.val(reply.replyer)
+	    		modalInputReplyDate.val(Comm_ReplyService.displayTime(reply.replydate))
+	    			.attr("readonly","readonly");
+	    		//댓글 목록의 값들을 모달창에 할당해줌
+	    		modal.data("rno",reply.rno);
+	    		modal.find("button[id != 'modalCloseBtn']").hide();
+	    		modalModBtn.show();
+	    		modalRemoveBtn.show();
+	    		//버튼 보여주기
+	    		$("#myModal").modal("show");	    		
+	    	});
+	    });
+	      
+	      
 	showList(1);
 });// end document ready
 </script>

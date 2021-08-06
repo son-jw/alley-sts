@@ -15,4 +15,5 @@ public interface Comm_ReplyMapper {
 	public List<Comm_ReplyVO> getListWithPaging(
 			@Param("cri") Comm_Criteria cri,
 			@Param("bno") Long bno);
+	public int getCountByBno(Long bno);//게시물별 댓글 총갯수
 }
