@@ -23,10 +23,19 @@
 
 			<tr>
 				<td><c:out value="${cb.bno }" /></td>
+				
 				<td><a href="${cb.bno }" class="move">
-				 	<c:out value="${cb.title }" /></a></td>
+				 	<c:out value="${cb.title }" />
+				 	<!-- ne : != 같지 않다 -->
+				 	<c:if test="${cb.replyCnt ne 0 }">
+				 		<span style="color:red;">[
+				 		<c:out value="${cb.replyCnt }"/>]</span>
+				 	</c:if></a></td>
+				
 				<td><c:out value="${cb.writer }" /></td>
+				
 				<td><fmt:formatDate pattern="yyyy-MM-dd" value="${cb.regdate }" /></td>
+				
 				<td><fmt:formatDate pattern="yyyy-MM-dd"
 						value="${cb.updatedate }" /></td>
 			</tr>
@@ -37,29 +46,23 @@
 <!-- 검색 상자 시작 -->
 	<div>
 		<div class="col-lg-12">
-		
 			<form id="searchForm" action="/commboard/list" method="get">			
 				&nbsp;&nbsp;&nbsp; <select name="type">
 					<option value="" ${pageMaker.cri.type==null?"selected":"" }>
 					--</option>	
-					
 					<option value="T" ${pageMaker.cri.type eq "T"?"selected":"" }>
 					제목</option>
-					
-					
 					<option value="C" ${pageMaker.cri.type eq "C"?"selected":"" }>
 					내용</option>
 					<option value="W" ${pageMaker.cri.type eq "W"?"selected":"" }>
 					작성자</option>
-					
 					<option value="TC" ${pageMaker.cri.type eq "TC"?"selected":"" }>
 					제목+내용</option>
 					<option value="TW" ${pageMaker.cri.type eq "TW"?"selected":"" }>
 					제목+작성자</option>
-					<option value="CW" ${pageMaker.cri.type eq "CW"?"selected":"" }>
+					<option value="WC" ${pageMaker.cri.type eq "WC"?"selected":"" }>
 					내용+작성자</option>
-					
-					<option value="TCW" ${pageMaker.cri.type eq "TCW"?"selected":"" }>
+					<option value="TWC" ${pageMaker.cri.type eq "TWC"?"selected":"" }>
 					제목+내용+작성자</option>
 				</select>
 				<input type="text" name="keyword" value="${pageMaker.cri.keyword }" />
@@ -70,13 +73,11 @@
 			</form>
 		</div>
 	</div>
-	<!-- 검색 상자 끝 -->
+<!-- 검색 상자 끝 -->
 		
-	
-	
 <div class="card-header py-3" align="right">
-	<nav aria-label="Page navigation example">
 
+	<nav aria-label="Page navigation example">
 		<ul class="pagination justify-content-center">
 			<c:if test="${pageMaker.prev }">
 				<li class="page-item"><a class="page-link" href="${pageMaker.startPage-1 }"
@@ -95,16 +96,14 @@
 					aria-label="Next"> <span aria-hidden="ture">&raquo;</span></a>
 				</li>
 			</c:if>
-
 		</ul>
 	</nav>
+	
 	<form id="actionForm" action="/commboard/list" method="get">
 		<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }">
 		<input type="hidden" name="amount" value="${pageMaker.cri.amount }">
-		
 		<input type="hidden" name="type" value="${pageMaker.cri.type }">
 		<input type="hidden" name="keyword" value="${pageMaker.cri.keyword }">
-			
 	</form>
 	<button id="regBtn" style="color: green;">글 쓰기</button>
 </div>
@@ -112,18 +111,20 @@
 <div class="modal" tabindex="-1" id="myModal">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<div class="modal-header"></div>
-
+			<div class="modal-header">
+				<h5 class="modal-title">알립니다!</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
 			<div class="modal-body"></div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary"
 					data-bs-dismiss="modal">닫기</button>
-
 			</div>
 		</div>
 	</div>
 </div>
 
+<%@ include file="../includes/footer.jsp"%>
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
 <script>
@@ -133,13 +134,11 @@
 			/* 아이디 regBtn 을 클릭한다면
 			현재창의 url 를 쓰기로 변경 */
 		});
-
 		var result = '<c:out value="${result}"/>';//result2
 		// 자바스크립트는 형추론 이용.
 		console.log("result:" + result);
 		checkModal(result);
 		// 게시물 번호를 매개변수로 전달하면서 checkModal 펑션 호출.
-
 		function checkModal(result) {
 			if (result === '') {
 				// == 는 값만 비교, === 은 값과 형식도 비교.
@@ -179,7 +178,7 @@
 		$("#searchForm button").on("click", function(e){
 		
 			if(!searchForm.find("option:selected").val()){
-				alert("검색 종률를 선택하세요.");
+				alert("검색 종류를 선택하세요.");
 				return false;
 			}
 			if(!searchForm.find("input[name='keyword']").val()){
@@ -195,10 +194,5 @@
 			searchForm.submit();
 		});
 		
-		
-		
 	});
 </script>
-
-
-<%@ include file="../includes/footer.jsp"%>

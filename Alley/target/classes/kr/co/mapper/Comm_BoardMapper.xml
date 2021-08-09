@@ -68,11 +68,11 @@
 
 	<select id="getListWithPaging" resultType="kr.co.domain.Comm_BoardVO">
 		<![CDATA[
-      	select bno, title, content, writer, regdate, updatedate 
+      	select bno, title, content, writer, regdate, updatedate, replycnt
       	from
       	(select /*+INDEX_DESC(comm_board pk_comm_board) */ 
       	rownum rn, bno, title, content, writer, regdate, 
-     	updatedate 
+     	updatedate , replycnt
       	from comm_board 
       	where 
       	]]>
@@ -93,6 +93,12 @@
 		bno > 0
 		]]>
 	</select>
+	
+	
+	<update id="updateReplyCnt">
+		update comm_board set replycnt=replycnt + #{amount}
+		where bno=#{bno}
+	</update>
 
 
 </mapper>

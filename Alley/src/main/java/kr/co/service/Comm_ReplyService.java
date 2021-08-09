@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import kr.co.domain.Comm_Criteria;
 import kr.co.domain.Comm_ReplyVO;
+import kr.co.domain.ReplyPageDTO;
 
 public interface Comm_ReplyService {
 	public int register(Comm_ReplyVO vo);
@@ -19,4 +20,7 @@ public interface Comm_ReplyService {
 	public List<Comm_ReplyVO> getList(
 			@Param("cri") Comm_Criteria cri, 
 			@Param("bno") Long bno);
+	
+	public ReplyPageDTO getListPage(Comm_Criteria cri, Long bno);
+	
 }

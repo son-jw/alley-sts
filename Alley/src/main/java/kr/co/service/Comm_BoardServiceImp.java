@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import kr.co.domain.Comm_BoardVO;
 import kr.co.domain.Comm_Criteria;
+
 import kr.co.mapper.Comm_BoardMapper;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
@@ -51,10 +52,12 @@ public class Comm_BoardServiceImp implements Comm_BoardService {
 		return cbm.getListWithPaging(cri);
 	}
 	@Override
-	public int getTotalCount(Comm_Criteria cri) {
+	public int getTotal(Comm_Criteria cri) {
 		log.info("get total count");
 		return cbm.getTotalCount(cri);	
 		
 	}
+
+	
 
 }

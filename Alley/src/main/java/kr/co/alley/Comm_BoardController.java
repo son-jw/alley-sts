@@ -28,54 +28,60 @@ public class Comm_BoardController {
 	public void list(Model model, Comm_Criteria cri) {
 		log.info("list: " + cri);
 		model.addAttribute("list", cbs.getList(cri));
+		// 과거 jsp 에서는 request.setAttribute 로 ArrayList 를 전달했지만
+		// 같은 역할을 model 이 대신.
+		// 컨트롤러 >> 서비스 >> 매퍼 >> mybatis 순으로 호출하여 처리.
 		
-		int total = cbs.getTotalCount(cri);
-		log.info("total :" + total);
-		
-		model.addAttribute("pageMaker", new PageDTO(cri,total));
-
+		int total = cbs.getTotal(cri);
+		log.info("total: " + total);
+		model.addAttribute("pageMaker", new PageDTO(cri, total));
 	}
 
 	@PostMapping("/register")
 	public String register(Comm_BoardVO cb, RedirectAttributes rttr) {
-		log.info("register :" + cb);
+		log.info("register : " + cb);
 		cbs.register(cb);
 		rttr.addFlashAttribute("result", cb.getBno());
-		log.info("cb.getBno() :" + cb.getBno());
+		// 리다이렉트 시키면서 1회용 값을 전달.
 
 		return "redirect:/commboard/list";
 	}
+	
 	@GetMapping("/register")
 	public void register() {
 
 	}
 
-	@GetMapping({ "/get", "/modify" })
-	public void get(@RequestParam("bno") Long bno, @ModelAttribute("cri") Comm_Criteria cri, Model model ) {
-		// @RequestParam : 요청 전달값으로 글번호를 이용
-		log.info("/get :" + bno);
+	// 제목 링크를 클릭하여 글 상세보기 - get 방식.
+	@GetMapping({"/get", "/modify"})
+	public void get(@RequestParam("bno") Long bno, Model model, 
+			@ModelAttribute("cri") Comm_Criteria cri) {
+		log.info("/get");
 		model.addAttribute("cb", cbs.get(bno));
 	}
 
+	// post 요청으로 /modify 가 온다면, 아래 메소드 수행.
 	@PostMapping("/modify")
 	public String modify(Comm_BoardVO cb, RedirectAttributes rttr, Comm_Criteria cri) {
+
 		log.info("modify:" + cb);
 		if (cbs.modify(cb)) {
 			rttr.addFlashAttribute("result", "success");
 		}
-		
 		rttr.addAttribute("pageNum", cri.getPageNum());
 		rttr.addAttribute("amount", cri.getAmount());
 		rttr.addAttribute("type", cri.getType());
 		rttr.addAttribute("keyword", cri.getKeyword());
-		
+
 		return "redirect:/commboard/list";
 	}
-
+	
 	@PostMapping("/remove")
-	public String remove(@RequestParam("bno") Long bno, Comm_Criteria cri, RedirectAttributes rttr) {
-		log.info("remove...." + bno);
-		if (cbs.remove(bno)) {
+	public String remove(@RequestParam("bno") Long bno,
+			RedirectAttributes rttr, Comm_Criteria cri) {
+		
+		log.info("remove..." + bno);
+		if(cbs.remove(bno)) {
 			rttr.addFlashAttribute("result", "success");
 		}
 		
@@ -83,8 +89,8 @@ public class Comm_BoardController {
 		rttr.addAttribute("amount", cri.getAmount());
 		rttr.addAttribute("type", cri.getType());
 		rttr.addAttribute("keyword", cri.getKeyword());
+
 		return "redirect:/commboard/list";
 	}
 
-		
 }

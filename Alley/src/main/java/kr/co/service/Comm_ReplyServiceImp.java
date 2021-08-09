@@ -4,9 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.domain.Comm_Criteria;
 import kr.co.domain.Comm_ReplyVO;
+import kr.co.domain.ReplyPageDTO;
+import kr.co.mapper.Comm_BoardMapper;
 import kr.co.mapper.Comm_ReplyMapper;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
@@ -19,7 +22,10 @@ public class Comm_ReplyServiceImp implements Comm_ReplyService {
 	@Setter(onMethod_ =@Autowired)
 	private Comm_ReplyMapper crm;
 	
+	@Setter(onMethod_=@Autowired)
+	private Comm_BoardMapper cbm;
 	
+	@Transactional
 	@Override
 	public int register(Comm_ReplyVO vo) {
 		log.info("register......" + vo);
@@ -31,7 +37,7 @@ public class Comm_ReplyServiceImp implements Comm_ReplyService {
 		log.info("get......" + rno);
 		return crm.read(rno);
 	}
-
+	@Transactional
 	@Override
 	public int remove(Long rno) {
 		log.info("remove......"+rno);
@@ -50,4 +56,13 @@ public class Comm_ReplyServiceImp implements Comm_ReplyService {
 		return crm.getListWithPaging(cri, bno);
 	}
 
+	@Override
+	public ReplyPageDTO getListPage(Comm_Criteria cri, Long bno) {
+		return new ReplyPageDTO(crm.getCountByBno(bno),
+				crm.getListWithPaging(cri,bno));
+		// 각각의 매퍼를 이용하여 댓글의 갯수와 댓글의 목록 추출.
+	}
+	 
+	
+	
 }

@@ -26,14 +26,17 @@
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
 	integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
 	crossorigin="anonymous"></script>
-	
-
-
 
 <title>먹거리 - 먹보들의 거리 리뷰</title>
 <!-- Favicon-->
 <link rel="icon" type="image/x-icon"
 	href="/resources/assets/favicon.ico" />
+<style>
+.a { font-family: Geogia;
+	font-style: normal;
+	font-weight: 800;
+	font-size: x-large; }
+</style>	
 </head>
 <body>
 	<!-- navbar -->
@@ -45,7 +48,8 @@
 				class="d-inline-block align-text-top">
 			</a>
 			<div>
-				<a class="navbar-brand" href="/">먹보들의<br>거리<br>리뷰
+				<a class="navbar-brand" style="font-family: Geogia;
+				font-style: oblique;" href="/">먹보들의<br>거리<br>리뷰
 				</a>
 			</div>
 			<div class="collapse navbar-collapse" id="navbarNav">
@@ -83,4 +87,3 @@
 			</div>
 		</div>
 	</nav>
-	
