@@ -3,7 +3,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!-- jstl core 쓸때 태그에 c 로 표시. -->
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!-- jstl fmt 쓸때 위와 같음. fmt : formatter 형식 맞춰서 표시 -->
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -26,6 +28,7 @@
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
 	integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
 	crossorigin="anonymous"></script>
+
 
 <title>먹거리 - 먹보들의 거리 리뷰</title>
 <!-- Favicon-->
@@ -80,10 +83,50 @@
 			</button>
 			<div class="collapse navbar-collapse" id="navbarNav">
 				<ul class="navbar-nav" style="padding-right: 30%;">
-					<li class="nav-item"><a class="nav-link" href="#">로그인/회원가입</a>
+				
+								
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							<!-- 정상 로그인, 찾기 : Douglas -->
+							<sec:authorize access="isAuthenticated()">
+								<span class="mr-2 d-none d-lg-inline text-gray-600 small">
+								<sec:authentication property="principal.username" /></span>
+							</sec:authorize>
+							<!-- 익명 로그인 -->
+							<sec:authorize access="isAnonymous()">
+								<i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"> </i>
+							</sec:authorize>
+							MY
+						</a>
+							
+						<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            				<!-- <li><a class="dropdown-item" href="#">Action</a></li>
+            				<li><a class="dropdown-item" href="#">Another action</a></li>
+            				<li><a class="dropdown-item" href="#">Something else here</a></li> -->
+            				<li>
+            				<!-- 로그인 이후 보여줄것 -->
+            					<a class="dropdown-item" href="#">
+								<sec:authorize access="isAuthenticated()">
+									<span class="mr-2 d-none d-lg-inline text-gray-600 small">
+									로그아웃
+									<sec:authentication property="principal.username" /></span>
+									
+								</sec:authorize>
+								</a>
+							<!-- 비 로그인 상태 -->
+								<a class="dropdown-item" href="#">
+								<sec:authorize access="isAnonymous()">
+									<i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"> </i>
+									로그인 
+								</sec:authorize>
+								</a>
+							</li>
+							
+            			</ul>          				
 					</li>
-					<li class="nav-item"><a class="nav-link" href="#">마이페이지</a></li>
-				</ul>
+				</ul>	
 			</div>
 		</div>
 	</nav>
+	
+	

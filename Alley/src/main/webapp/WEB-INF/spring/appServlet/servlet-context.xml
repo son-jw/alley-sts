@@ -25,7 +25,6 @@
 	
 	<beans:bean id="multipartResolver"
 		class="org.springframework.web.multipart.support.StandardServletMultipartResolver" />
-	<!-- xml 작성시도 ctrl+space 자동 완성 지원함.
-	StandardServletM 까지만 쓰고 자동완성. -->	
+		
 		
 </beans:beans>

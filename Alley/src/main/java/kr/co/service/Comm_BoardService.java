@@ -2,6 +2,7 @@ package kr.co.service;
 
 import java.util.List;
 
+import kr.co.domain.Comm_BoardAttachVO;
 import kr.co.domain.Comm_BoardVO;
 import kr.co.domain.Comm_Criteria;
 
@@ -18,6 +19,8 @@ public interface Comm_BoardService {
 	public List<Comm_BoardVO> getList(Comm_Criteria cri);// 목록
 	
 	public int getTotal(Comm_Criteria cri);
+	
+	public List<Comm_BoardAttachVO> getAttachList(Long bno);
 	
 	
 }

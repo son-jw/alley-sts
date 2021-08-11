@@ -52,6 +52,23 @@
 </div>
 
 
+<!-- 첨부파일 시작 -->
+<br/>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">첨부파일</div>
+			<div class="panel-body">
+				<div class="uploadResult">
+					<ul></ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 첨부파일 끝 -->
+
+
 <!-- 댓글 목록 시작 -->
 <br />
 <div class="row">
@@ -163,8 +180,7 @@
 	    	  var reply = {
 	    			  reply : modalInputReply.val(),
 	    			  replyer : modalInputReplyer.val(),
-	    			  bno : bnoValue
-	    	  }; //ajax로 전달한 reply 객체 선언 과 할당
+	    			  bno : bnoValue}; //ajax로 전달한 reply 객체 선언 과 할당
 	    	  Comm_ReplyService.add(reply, function(result) {
 	    		  alert(result);
 	    		  modal.find("input").val("");//초기화
@@ -200,7 +216,7 @@
 	    	  Comm_ReplyService.get(rno, function(reply){
 	    		  modalInputReply.val(reply.reply);
 	    		  modalInputReplyer.val(reply.replyer);
-	    		  modalInputReplyDate.val(Comm_ReplyService.displayTime(reply.replyDate))
+	    		  modalInputReplyDate.val(Comm_ReplyService.displayTime(reply.replydate))
 	    		  			.attr("readonly","readonly");
 	    		  modal.data("rno",reply.rno);
 	    		  modal.find("button[id !='modalCloseBtn']").hide();
@@ -241,7 +257,7 @@
 	    			str +="primary-font'>";
 	    			str += list[i].replyer+ "</strong>";
 	    			str += "<small class='float-sm-right '>";
-	    			str += Comm_ReplyService.displayTime(list[i].replyDate) + "</small></div>";
+	    			str += Comm_ReplyService.displayTime(list[i].replydate) + "</small></div>";
 	    			str += "<p>" + list[i].reply;
 	    			str += "</p></div></li>";
 	    		}
@@ -297,6 +313,41 @@
 			var targetPageNum = $(this).attr("href");
 			pageNum = targetPageNum;
 			showList(pageNum);
+		});
+		
+		//첨부파일 목록 표시. 즉시 실행 함수로 사용함
+		
+		// 첨부파일 목록 표시. 즉시 실행 함수.
+		(function(){
+			var bno='<c:out value="${cb.bno}"/>';
+			// 화면상에 공유된 bno 값 가져와 사용 준비.
+			$.getJSON("/commboard/getAttachList",{bno:bno}, function(arr){
+						console.log(arr);										
+						var str="";
+						
+						$(arr).each(function(i,attach){
+							str+="<li data-path='";
+							str+=attach.uploadPath+"' data-uuid='";
+							str+=attach.uuid+"' data-filename='";
+							str+=attach.fileName+"' data-type='";
+							str+=attach.fileType+"'><div>";
+							str+="<img src='/resources/img/attach.png' width='20'>";
+							str+="<span>&nbsp;"+attach.fileName+"</span><br/> ";											
+							str+="</div></li>";
+						});
+						$(".uploadResult ul").html(str);
+					});
+		})();
+		//첨부파일 클릭시 다운로드 처리 스크립트.
+		$(".uploadResult").on("click","li",function(e) {
+			console.log("download file");
+			var liobj = $(this);
+			var path = encodeURIComponent(liobj.data("path")
+					+"/"+liobj.data("uuid")+"_"
+					+liobj.data("filename"));
+			// C:\uplo
+			self.location="/download?fileName="+path;
+			
 		});
 }); // end document ready
 </script>
