@@ -29,7 +29,10 @@
 					</div>
 
 					<div class="form-group">
-						<label>작성자</label> <input class="form-control" name="writer">
+						<label>작성자</label> 
+						<input class="form-control" name="writer"
+							value='<sec:authentication property="principal.username" />' readonly="readonly">
+							
 					</div>
 
 					<button type="submit" class="btn btn-default">등록</button>
@@ -64,8 +67,7 @@
 
 <%@ include file="../includes/footer.jsp"%>
 
-<script type="text/javascript"
-	src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
+
 <script>
 $(document).ready(function(e){
 	var formObj = $("form[role='form']");
@@ -112,7 +114,7 @@ $(document).ready(function(e){
 	// https://regexper.com/
 
 	var maxSize = 5242880; // 5MB
-
+	
 	function checkExtension(fileName, fileSize) {
 		if (fileSize >= maxSize) {
 			alert("파일 크기 초과");
@@ -125,7 +127,10 @@ $(document).ready(function(e){
 		}
 		return true;
 	}
-
+	
+	var csrfHeaderName = "${_csrf.headerName}";
+	var csrfTokenValue = "${_csrf.token}";
+	
 	$("input[type='file']")
 			.change(
 					function(e) {
@@ -148,6 +153,9 @@ $(document).ready(function(e){
 							url : '/uploadAjaxAction',
 							processData : false,// processData가 false로 되어 있으면 키와 값의 쌍으로 설정하지 않는다
 							contentType : false,// 파일 첨부시 문서 정보를 따로 지정하지 않음
+							beforeSend : function(xhr){
+								xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+								},
 							data : formData,
 							type : 'POST',
 							dataType : 'json',
@@ -202,10 +210,16 @@ $(document).ready(function(e){
 
 		$.ajax({
 			url : '/deleteFile',
+			
 			data : {
 				fileName : targetFile,
 				type : type
-			},
+				},
+				
+			beforeSend : function(xhr){
+					xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+				},
+				
 			dataType : 'text',
 			type : 'POST',
 			success : function(result) {

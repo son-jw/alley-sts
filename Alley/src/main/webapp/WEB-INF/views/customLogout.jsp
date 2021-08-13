@@ -34,10 +34,11 @@
 
 <%@ include file="includes/footer.jsp"%>
 
+
 <script>
 	$(".btn-success").on("click", function(e) {
 		e.preventDefault();
-		$("form").submit()''
+		$("form").submit();
 	});
 </script>
 

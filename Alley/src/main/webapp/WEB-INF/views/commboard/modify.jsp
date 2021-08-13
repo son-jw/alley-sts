@@ -15,7 +15,8 @@
 			<div class="panel-heading">글 수정</div>
 			<div class="panel-body">
 				<form role="form" action="/commboard/modify" method="post">
-
+					
+					<input type="hidden" name= "${_csrf.parameterName }" value="${_csrf.token }"/>
 					<input type="hidden" name="bno" value="${cb.bno }" />
 					<input type="hidden" name="pageNum" value="${cri.pageNum }" />
 					<input type="hidden" name="amount" value="${cri.amount }" />
@@ -37,12 +38,16 @@
 						<label>작성자</label> <input class="form-control" name="writer"
 							value='<c:out value="${cb.writer }"/>' readonly="readonly">
 					</div>
-
-					<button type="submit" data-oper="modify" class="btn btn-success">수정</button>
-
-					<button type="submit" data-oper="remove" class="btn btn-danger">삭제</button>
-
-					<button type="submit" data-oper="list" class="btn btn-info">목록</button>
+					<sec:authentication property="principal" var="pinfo" />
+					<sec:authorize access="isAuthenticated()">
+						<!-- 인증된 사용자만 허가 -->
+						<c:if test="${pinfo.username eq board.writer }">
+							<!-- 인증되었으면서 작성자가 본인 일때 수정 버튼 표시 -->
+							<button type="submit" data-oper="modify" class="btn btn-success">수정</button>
+							<button type="submit" data-oper="remove" class="btn btn-danger">삭제</button>
+						</c:if>
+					</sec:authorize>
+							<button type="submit" data-oper="list" class="btn btn-info">목록</button>
 				
 				</form>
 
@@ -77,10 +82,16 @@
 <%@ include file="../includes/footer.jsp"%>
 
 
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.0.min.js" ></script>
 <script>
 	$(document).ready(function() {
 		/*문서가 준비 됐다면, 아래 함수를 실행함*/
+		var csrfHeaderName = "${_csrf.headerName}";
+		var csrfTokenValue="${_csrf.token}";
+		
+		$(document).ajaxSend(function(e,xhr,options){
+			xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+		});
+		
 		var formObj = $("form");
 		$('button').on("click",function(e) {
 			/* 버튼이 클릭된다면 아램함수들을 실행하도록, e라는 이베튼 개체를 전달*/
