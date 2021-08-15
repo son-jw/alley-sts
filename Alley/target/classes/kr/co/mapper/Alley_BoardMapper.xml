@@ -41,6 +41,7 @@
       <![CDATA[
          select mainimage,storename,address,ano
          from alley_board  where ano > 0 order by ano desc
+         
       ]]>   
    </select>
 
