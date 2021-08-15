@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.mapper.Alley_BoardMapper">
+
+   <select id="best1" resultType="kr.co.domain.Alley_BoardVO">
+      <![CDATA[
+         select mainimage,storename,address,ano
+         from alley_board where best='best1'
+      ]]>   
+   </select>
+   
+   <select id="best2" resultType="kr.co.domain.Alley_BoardVO">
+      <![CDATA[
+         select mainimage,storename,address,ano
+         from alley_board where best='best2'
+      ]]>     
+   </select>
+   
+   <select id="best3" resultType="kr.co.domain.Alley_BoardVO">
+       <![CDATA[
+         select mainimage,storename,address,ano
+         from alley_board where best='best3'
+      ]]>   
+   </select>
+   
+   <select id="best4" resultType="kr.co.domain.Alley_BoardVO">
+      <![CDATA[
+         select mainimage,storename,address,ano
+         from alley_board where ano='22'
+      ]]>   
+   </select>
+
+   <select id="view" resultType="kr.co.domain.Alley_BoardVO">
+      select * from alley_board where ano=#{ano}
+   </select>
+   
+   <!-- Alist= getList 전체 목록 뿌리기 -->
+   <select id="getAList" resultType="kr.co.domain.Alley_BoardVO">
+      <![CDATA[
+         select mainimage,storename,address,ano
+         from alley_board  where ano > 0 order by ano desc
+      ]]> 
+  
+   </select>
+
+
+</mapper>
