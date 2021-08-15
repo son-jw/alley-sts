@@ -21,7 +21,7 @@
 				</div>
 
 				<div class="form-group">
-					<label>Title</label><input class="form-control" name="title" 
+					<label>제목</label><input class="form-control" name="title" 
 						value='<c:out value="${cb.title }"/>' readonly="readonly">
 				</div>
 
