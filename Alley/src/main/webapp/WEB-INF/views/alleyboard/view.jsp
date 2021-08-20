@@ -76,27 +76,157 @@
 			
 			<!-- 댓글 작성 -->
 			<section class="mb-5">
+			<sec:authorize access='isAuthenticated()'>
 				<div class="card bg-light">
 					<div class="card-body">
 						<!-- Comment form-->
-						<form class="mb-4">
+						<form class="form_input" id="reply-form" 
+							role="form" method="post" autocomplete="off">
+							<input type="hidden" value="${alist.ano} }" name="ano" id="ano">
+							<input type="hidden" value="${alist.replyer }" name="replyer" id="replyer">
+							
 							<textarea class="form-control" rows="3"
-								placeholder="솔직한 후기를 남겨주세요..."></textarea>
+								placeholder="솔직한 후기를 남겨주세요..."></textarea>						
+						
+							<div class="" align="right">
+								<button type="button" id="review-submit" class="btn btn-warning btn-sm">
+								댓글등록</button>
+							</div>
 						</form>
-						<div class="" align="right">
-							<button type="button" class="btn btn-warning btn-sm">
-							댓글등록</button>
-						</div>
+						<!-- 댓글 작성 종료  -->
 					</div>
 				</div>
+				</sec:authorize>
 			</section>
+			
+			<div class="col-sm-12 fix">
+				<div class="description">
+					<!-- Nav tabs -->
+					<ul class="nav product-nav">
+						<li class="active"><a data-toggle="tab" href="#description">리뷰</a></li>
+					</ul>
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div id="description" class="tab-pane fade active in" role="tabpanel">
+							<div>
+								<section class="replyList">
+									<ul>
+										<!-- 리뷰 리스트 목록이 들어갈 위치 -->
+									</ul>
+								</section>
+								<script>
+									replyList(); <!--리스트 스크립트문 실행-->
+								</script>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
+</div>
+
+<!-- 댓글 수정 모달 -->
+<div id="modal">
+	<div class="modal_content">
+    	<input type="hidden" id="modalarno" name="arno">
+    	<input type="hidden" id="modalreplyer" name="replyer"> 
+        <h2>리뷰 수정</h2>   
+       	<br>
+       	
+
+		<br><br>					
+        <p class="cont">    
+			<label>댓글</label>
+			<div class="form-group">
+				<textarea class="modal_repCon" id="reply_modal" name="modal_repCon"></textarea>
+			</div>
+        </p>
+        <br>
+        
+		<button type="button" class="modal_modify_btn">수정</button>
+	    <button type='button' class='delete'>삭제</button>	         
+		<button type="button" class="modal_close_btn" >취소</button>
+        
+    </div>
+    <div class="modal_layer"></div>
 </div>
 
 
 <%@ include file="../includes/footer.jsp"%>
 
 <script>
+//리뷰 리스트
+function replyList() {
+	var ano=${alist.ano};
+	
+	$.getJSON("/alist/view/replyList" + "?ano=" + ano,function(data) {
+		
+		var str= "";
+		
+		$(data).each(function() {
+			
+			str += "<li class='replyList' data-arno='" +this.arno + "'>";
+			str += "<div class='userInfo'>";
+			
+			str += "<div id='reply" + this.arno + "' class='replyContent'>" + this.reply + "</div><br />";
+			str += "<input type='hidden' class='reviewId' value=" + this.replyer + ">";
+			str += "<div class='review_bt'>";
+			str += "<b class='review_modify' id='review_modify_" + this.arno + "' data-arno='";
+			str += this.arno + "' data-id='" + this.replyer + "'>수정/삭제</b>";
+			str += "</div>";
+			str += "<div class='div_line'></div>";
+			str += "</li>";
+		});
+		
+		$("section.replyList ul").html(str);
+	})
+	
+}
+</script>
 
+<script>
+$(document).ready(function() {
+	var csrfHeaderName = "${_csrf.headerName}";
+	var csrfTokenValue = "${_csrf.token}";
+	
+	$(document).ajaxSend(function(e,xhr,options) {
+		xhr.setRequestHeader(csrdHeaderName, csrfTokenValue);
+	});
+	
+	//리뷰 등록
+	$("review_submit").on("click",function(e) {
+		var reveiwId =$("reviewId");
+		var replyer = $("#replyer").val();
+		
+		if(reviewId.val() == replyer) {
+			e.preventDefault();
+			alert("이미 리뷰를 등록 하셨습니다.");
+			return;
+		}
+		
+		e.preventDefault();
+		
+		var formObj = $("#review_form form=[role='form']");
+		var ano = $("#ano").val();
+		var reply = $("#reply").val();
+		
+		var data = {
+				ano : ano,
+				replyer : replyer,
+				reply : reply
+		}
+		
+		$.ajax({
+			url : "/alleyboard/view/registReply",
+			type : "post",
+			data : data,
+			success : function() {
+				replyList();
+				$('#reply').val("");
+			}
+		});
+	});
+})
 </script>

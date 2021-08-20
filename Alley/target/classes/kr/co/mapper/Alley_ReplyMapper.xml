@@ -14,20 +14,43 @@
 		select * from alley_board_reply where arno=#{arno}
 	</select>
 	
-	<delete id="delete">
+	<!-- <delete id="delete">
 		delete from alley_board_reply where arno=#{arno}
 	</delete>
 	
 	<update id="update">
 		update alley_board_reply set reply=#{reply} , updatedate=sysdate
 		where arno=#{arno}
-	</update>
+	</update> -->
+	
+	<!-- 가게  댓글,리뷰 리스트  -->
 	
 	<select id="getListWithPaging"
 		resultType="kr.co.domain.Alley_ReplyVO">
 		select arno, ano, reply, replyer, replydate, updatedate
 		from alley_board_reply where ano=#{ano}
 		order by arno asc
+	</select>	
+	
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deleteReply">
+		select replyer
+		from alley_board_reply
+		where arno=#{arno}
+	</delete>
+	
+	<!-- 체크 아이디 -->
+	<select id="CheckId" resultType="String">
+		select replyer
+		from alley_board_reply
+		where arno = #{arno}
 	</select>
-
+	
+	<!-- 리뷰 수정 -->
+	<update id="modifyReply">
+		update alley_board_reply
+		set reply = #{reply}
+		where arno = #{arno} and replyer=#{replyer}	
+	</update>
 </mapper>

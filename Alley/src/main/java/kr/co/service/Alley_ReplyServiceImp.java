@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import kr.co.domain.Alley_ReplyVO;
 import kr.co.domain.Comm_Criteria;
+import kr.co.domain.ReplyPageDTO;
 import kr.co.mapper.Alley_ReplyMapper;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
@@ -51,5 +52,30 @@ public class Alley_ReplyServiceImp implements Alley_ReplyService {
 		log.info("get reply list" + ano);
 		return arm.getListWithPaging(cri, ano);
 	}
+	
+	//아이디 체크
+	@Override
+	public String CheckId(Long arno) throws Exception {
+		
+		return arm.CheckId(arno);
+	}
+	
+	
+	//리뷰 삭제
+	@Override
+	public void deleteReply(Alley_ReplyVO reply) throws Exception {
+		
+		arm.deleteReply(reply);
+	}
 
+	@Override
+	public void modifyReply(Alley_ReplyVO reply) throws Exception {
+		arm.modifyReply(reply);
+		
+	}
+	
+	
+
+
+	
 }
