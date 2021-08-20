@@ -68,7 +68,7 @@
 	</ul>
 </nav>
 
-<form id="actionForm" action="/alleyboard/alist" method="get">
+<form id="actionForm" action="/alleyboard/search" method="get">
 	<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }">
 	<input type="hidden" name="amount" value="${pageMaker.cri.amount }">
 </form>
@@ -100,12 +100,9 @@
 			//(view으로 변경하여 view 의 script중 ano,page 부분 전달)
 			actionForm.submit();
 			//전송
-		}); */ 
-		
+		}); */
 
-	});//end_document ready
-	
-	
+	});
 </script>
 
 

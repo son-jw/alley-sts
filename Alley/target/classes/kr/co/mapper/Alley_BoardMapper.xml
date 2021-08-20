@@ -4,46 +4,138 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.mapper.Alley_BoardMapper">
 
-   <select id="best1" resultType="kr.co.domain.Alley_BoardVO">
-      <![CDATA[
-         select mainimage,storename,address,ano
-         from alley_board where best='best1'
-      ]]>   
-   </select>
-   
-   <select id="best2" resultType="kr.co.domain.Alley_BoardVO">
-      <![CDATA[
-         select mainimage,storename,address,ano
-         from alley_board where best='best2'
-      ]]>     
-   </select>
-   
-   <select id="best3" resultType="kr.co.domain.Alley_BoardVO">
-       <![CDATA[
-         select mainimage,storename,address,ano
-         from alley_board where best='best3'
-      ]]>   
-   </select>
-   
-   <select id="best4" resultType="kr.co.domain.Alley_BoardVO">
-      <![CDATA[
-         select mainimage,storename,address,ano
-         from alley_board where ano='22'
-      ]]>   
-   </select>
+	<sql id="cri">
+		<trim prefix="(" suffix=") AND " prefixOverrides="OR">
+			<foreach item="type" collection="typeArr">
+				<trim prefix="OR">
+					<choose>
+						<when test="type=='S'.toString ()">
+							storename like '%'||#{keyword}||'%'
+						</when>
 
-   <select id="view" resultType="kr.co.domain.Alley_BoardVO">
-      select * from alley_board where ano=#{ano}
-   </select>
-   
-   <!-- Alist= getList 전체 목록 뿌리기 -->
-   <select id="getAList" resultType="kr.co.domain.Alley_BoardVO">
-      <![CDATA[
-         select mainimage,storename,address,ano
-         from alley_board  where ano > 0 order by ano desc
-         
-      ]]>   
-   </select>
+						<when test="type=='A'.toString()">
+							address like '%'||#{keyword}||'%'
+						</when>
+						<when test="type=='T'.toString()">
+							subtitle like '%'||#{keyword}||'%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>	
+	
+
+
+	<select id="best1" resultType="kr.co.domain.Alley_BoardVO">
+		<![CDATA[
+			select ano,mainimage,storename,address 
+			from alley_board where best='best1'
+		]]>	
+	</select>
+	
+	<select id="best2" resultType="kr.co.domain.Alley_BoardVO">
+		<![CDATA[
+			select ano,mainimage,storename,address 
+			from alley_board where best='best2'
+		]]>	
+	</select>
+	
+	<select id="best3" resultType="kr.co.domain.Alley_BoardVO">
+		<![CDATA[
+			select ano,mainimage,storename,address 
+			from alley_board where best='best3'
+		]]>	
+	</select>
+	
+	<!-- 식당 리스트 -->
+	<select id="getList" resultType="kr.co.domain.Alley_BoardVO">
+		<![CDATA[
+			select *
+			from (
+				select rownum rn, ano, storename, address, subtitle, mainimage
+				from alley_board
+				where rownum <= #{pageNum} * #{amount} order by ano asc
+			)
+			where rn > (#{pageNum}-1) * #{amount} 
+		]]>
+	</select>
+	
+	<select id="getAList"
+		resultType="kr.co.domain.Alley_BoardVO">
+		<![CDATA[
+		select ano, storename, address, subtitle, mainimage
+		from
+		(select /*+INDEX_DESC(alley_board pk_alley_board) */
+		rownum rn, ano, storename, address, subtitle, mainimage
+		from alley_board
+		where 
+		]]>
+		
+		<include refid="cri" />
+		
+		<![CDATA[
+		rownum <= #{pageNum} * #{amount})
+		where rn > (#{pageNum}-1) * #{amount}
+		]]>
+	</select>
+	
+	<!-- 식당 갯수 -->
+	<select id="getTotal" resultType="int">
+		<![CDATA[
+			select count(ano)
+			from alley_board
+			where 
+		]]>
+		<include refid="cri" />		
+		<![CDATA[
+			ano > 0
+		]]>
+	</select>
+	
+	<!-- 식당 검색보기 -->
+	<select id="searchList" resultType="kr.co.domain.Alley_BoardVO">
+		<![CDATA[
+			select *
+			from (
+				select rownum rn, ano, storename, address, subtitle, mainimage
+				from alley_board
+				where
+				]]>
+				<include refid="cri" />				
+				<![CDATA[
+				rownum <= #{pageNum} * #{amount}
+			)
+			where rn > (#{pageNum}-1) * #{amount}
+		]]>
+	
+	</select>
+	
+	<select id="localList" resultType="kr.co.domain.Alley_BoardVO">
+		<![CDATA[
+			select *
+			from (
+				select rownum rn, ano, storename, address, subtitle, mainimage
+				from alley_board
+				where
+				]]>
+				<include refid="cri" />				
+				<![CDATA[
+				rownum <= #{pageNum} * #{amount}
+			)
+			where rn > (#{pageNum}-1) * #{amount}
+		]]>
+	
+	</select>
+	
+	
+	<!-- 식당 상세보기 -->
+	<select id="view" resultType="kr.co.domain.Alley_BoardVO">
+		select * from alley_board where ano=#{ano}
+	</select>
+	
+	
 
 
 </mapper>
+

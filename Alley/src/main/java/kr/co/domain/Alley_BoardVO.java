@@ -13,5 +13,6 @@ public class Alley_BoardVO {
    private String booknumber; // 식당번호
    private String mainimage; // 음식사진
    private String outimage; // 식당외부사진
-
+   
+   private String best;
 }

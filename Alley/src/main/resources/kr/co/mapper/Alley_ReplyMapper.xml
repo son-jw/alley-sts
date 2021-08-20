@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.mapper.Alley_ReplyMapper">
+	<insert id="insert">
+		insert into alley_board_reply (arno,ano,reply,replyer)
+		values
+		(seq_reply.nextval, #{ano}, #{reply}, #{replyer})
+	</insert>
+	
+	<select id="read" resultType="kr.co.domain.Comm_ReplyVO">
+		select * from alley_board_reply where arno=#{arno}
+	</select>
+	
+	<delete id="delete">
+		delete from alley_board_reply where arno=#{arno}
+	</delete>
+	
+	<update id="update">
+		update alley_board_reply set reply=#{reply} , updatedate=sysdate
+		where arno=#{arno}
+	</update>
+	
+	<select id="getListWithPaging"
+		resultType="kr.co.domain.Alley_ReplyVO">
+		select arno, ano, reply, replyer, replydate, updatedate
+		from alley_board_reply where ano=#{ano}
+		order by arno asc
+	</select>
+
+</mapper>

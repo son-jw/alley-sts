@@ -47,7 +47,8 @@
 	<div>
 		<div class="col-lg-12">
 			<form id="searchForm" action="/commboard/list" method="get">			
-				&nbsp;&nbsp;&nbsp; <select name="type">
+				&nbsp;&nbsp;&nbsp; 
+				<select name="type">
 					<option value="" ${pageMaker.cri.type==null?"selected":"" }>
 					--</option>	
 					<option value="T" ${pageMaker.cri.type eq "T"?"selected":"" }>
