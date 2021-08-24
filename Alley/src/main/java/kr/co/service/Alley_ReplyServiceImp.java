@@ -7,12 +7,10 @@ import org.springframework.stereotype.Service;
 
 import kr.co.domain.Alley_ReplyVO;
 import kr.co.domain.Comm_Criteria;
-import kr.co.domain.ReplyPageDTO;
 import kr.co.mapper.Alley_ReplyMapper;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
-
 
 @Log4j
 @Service
@@ -24,26 +22,25 @@ public class Alley_ReplyServiceImp implements Alley_ReplyService {
 
 	@Override
 	public int register(Alley_ReplyVO vo) {
-		log.info("register----" + vo);
+		log.info("register.." + vo);
 		return arm.insert(vo);
 	}
 
 	@Override
 	public Alley_ReplyVO get(Long arno) {
-		log.info("get----" + arno);
-
+		log.info("get.." + arno);
 		return arm.read(arno);
 	}
 
 	@Override
 	public int remove(Long arno) {
-		log.info("remove......." + arno);
+		log.info("remove.." + arno);
 		return arm.delete(arno);
 	}
 
 	@Override
 	public int modify(Alley_ReplyVO reply) {
-		log.info("modify......." + reply);
+		log.info("modify.." + reply);
 		return arm.update(reply);
 	}
 
@@ -52,30 +49,5 @@ public class Alley_ReplyServiceImp implements Alley_ReplyService {
 		log.info("get reply list" + ano);
 		return arm.getListWithPaging(cri, ano);
 	}
-	
-	//아이디 체크
-	@Override
-	public String CheckId(Long arno) throws Exception {
-		
-		return arm.CheckId(arno);
-	}
-	
-	
-	//리뷰 삭제
-	@Override
-	public void deleteReply(Alley_ReplyVO reply) throws Exception {
-		
-		arm.deleteReply(reply);
-	}
-
-	@Override
-	public void modifyReply(Alley_ReplyVO reply) throws Exception {
-		arm.modifyReply(reply);
-		
-	}
-	
-	
-
-
 	
 }

@@ -112,12 +112,12 @@
 						<sec:authentication property="principal.username" var="userid" />
 						<li>안녕하세요!&nbsp; ${userid } 님</li>
 						<li>/</li>
-						<li><a class="nav-link" href="/customLogout"> 로그아웃</a></li>
+						<li><a class="nav-link" href="member/customLogout"> 로그아웃</a></li>
 						<li>마이페이지</li>
 					</sec:authorize>
 					<sec:authorize access="isAnonymous()">
-						<li class="nav-item"><a class="nav-link" href="/customLogin">로그인</a></li>
-						<li class="nav-item"><a class="nav-link" href="#">회원가입</a></li>
+						<li class="nav-item"><a class="nav-link" href="/member/customLogin">로그인</a></li>
+						<li class="nav-item"><a class="nav-link" href="/member/signup">회원가입</a></li>
 					</sec:authorize>
 				</ul>
 			</div>

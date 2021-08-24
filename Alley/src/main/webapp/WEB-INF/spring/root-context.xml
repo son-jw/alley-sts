@@ -8,8 +8,9 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
 	<!-- Root Context: defines shared resources visible to all other web components -->
-
 	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+		<!-- <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"></property> 
+			<property name="jdbcUrl" value="jdbc:oracle:thin:@localhost:1521:XE"></property> -->
 		<property name="driverClassName"
 			value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
 		<property name="jdbcUrl"
@@ -23,7 +24,7 @@
 		<constructor-arg ref="hikariConfig"></constructor-arg>
 	</bean>
 
-	<!-- sql 처리 과정에서 사용되는 세션 관리 위에서 생성한 datasource bean -->
+	<!-- sql 처리 과정에서 사용되는 세션 관리 위에서 생성한 dataSource bean 이용. -->
 	<bean id="sqlSessionFactory"
 		class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
@@ -31,8 +32,9 @@
 
 	<mybatis-spring:scan base-package="kr.co.mapper" />
 	
-	<context:component-scan
-		base-package="kr.co.service">
+	<!-- 자동처리로 등록해놓겠다. -->
+	<context:component-scan base-package="kr.co.service"> 
 	</context:component-scan>
+	<!-- 스프링 프레임워크에서 해당 패키지를 살펴보고, 컴포넌트와 관련 어노테이션을 만나면 그 부분을 자동 객체화 처리 -->
 
 </beans>

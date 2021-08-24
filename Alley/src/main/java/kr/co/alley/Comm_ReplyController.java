@@ -90,6 +90,7 @@ public class Comm_ReplyController {
 			// 생성되는 정보의 형태는 json 에 일반적인 문자열 이용.
 			// @RequestBody : json 으로 생성된 정보를 개체화.
 			vo.setRno(rno);
+			
 			log.info("rno: " + rno);
 			log.info("modify: " + vo);
 			

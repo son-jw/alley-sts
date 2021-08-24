@@ -1,56 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.mapper.Alley_ReplyMapper">
+
+	<!-- 리뷰 댓글작성 -->
 	<insert id="insert">
 		insert into alley_board_reply (arno,ano,reply,replyer)
 		values
-		(seq_reply.nextval, #{ano}, #{reply}, #{replyer})
+		(seq_alley_reply.nextval, #{ano}, #{reply}, #{replyer})
 	</insert>
 	
-	<select id="read" resultType="kr.co.domain.Comm_ReplyVO">
-		select * from alley_board_reply where arno=#{arno}
+	<!-- 게시물당 조회가 아니라 댓글1개 조회 -->
+	<select id="read" resultType="kr.co.domain.Alley_ReplyVO">
+		select * from alley_board_reply where
+		arno=#{arno}
 	</select>
-	
-	<!-- <delete id="delete">
+
+	<!-- 리뷰 댓글삭제 -->
+	<delete id="delete">
 		delete from alley_board_reply where arno=#{arno}
 	</delete>
 	
+	<!-- 리뷰 댓글수정 -->
 	<update id="update">
-		update alley_board_reply set reply=#{reply} , updatedate=sysdate
-		where arno=#{arno}
-	</update> -->
-	
-	<!-- 가게  댓글,리뷰 리스트  -->
-	
+		update alley_board_reply set reply=#{reply}, updatedate=sysdate
+		where arno = #{arno}
+	</update>
+
+	<!-- 리뷰 댓글목록 -->
 	<select id="getListWithPaging"
 		resultType="kr.co.domain.Alley_ReplyVO">
 		select arno, ano, reply, replyer, replydate, updatedate
 		from alley_board_reply where ano=#{ano}
 		order by arno asc
-	</select>	
-	
-	
-	<!-- 댓글 삭제 -->
-	<delete id="deleteReply">
-		select replyer
-		from alley_board_reply
-		where arno=#{arno}
-	</delete>
-	
-	<!-- 체크 아이디 -->
-	<select id="CheckId" resultType="String">
-		select replyer
-		from alley_board_reply
-		where arno = #{arno}
 	</select>
 	
-	<!-- 리뷰 수정 -->
-	<update id="modifyReply">
-		update alley_board_reply
-		set reply = #{reply}
-		where arno = #{arno} and replyer=#{replyer}	
-	</update>
 </mapper>

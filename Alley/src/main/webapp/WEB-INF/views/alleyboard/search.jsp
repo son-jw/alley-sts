@@ -4,26 +4,28 @@
 
 <%@ include file="../includes/header.jsp"%>
 
+<div class="py-5 bg-warning">
+	<div class="container">
+		<h2 class="m-0 text-center">"${pageMaker.cri.keyword }"에 대한 검색결과</h2>
+	</div>
+</div>
 
 <!-- Section-->
 <section class="py-5">
 	<div class="container px-4 px-lg-5 mt-5">
-
-		<div
-			class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+		<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 			<c:forEach var="alist" items="${alist }">
 				<div class="col mb-5">
-					<div>
-						<p class="a">
-							<c:out value="${alist.subtitle }" />
-						</p>
-					</div>
-					<div type="hidden" value="${alist.ano }"></div>
+				<!-- 골목이름 -->
+				<p class="a">
+					<c:out value="${alist.subtitle }" />
+				</p>
 					<div class="card h-100">
 						<!-- 음식 사진 -->
-						<a href="/alleyboard/view?ano=${alist.ano } " >
-						<img class="card-img-top"
-							src="${alist.mainimage }" style="height: 200px;" /></a>
+						<a href="/alleyboard/view?ano=${alist.ano }">
+						<img class="card-img-top" src="${alist.mainimage }"
+							style="height: 200px;" />
+						</a>
 						<!-- 식당 정보 -->
 						<div class="card-body p-4">
 							<div class="text-center">
@@ -38,13 +40,10 @@
 					</div>
 				</div>
 			</c:forEach>
-
 		</div>
 	</div>
-
 </section>
 
-<!-- Pagination -->
 <nav aria-label="Page navigation example">
 	<ul class="pagination justify-content-center">
 		<c:if test="${pageMaker.prev }">
@@ -73,39 +72,17 @@
 	<input type="hidden" name="amount" value="${pageMaker.cri.amount }">
 </form>
 
+<%@ include file="../includes/footer.jsp"%>
 
 <script>
 	$(document).ready(function() {
-
 		//페이징 이동시 넘기는 값
 		var actionForm = $("#actionForm");
-
 		$(".page-item a").on("click", function(e) {
 			e.preventDefault();
-
 			actionForm.find("input[name='pageNum']").val($(this).attr("href"));
 			//액션폼 input[name=pageNum] 값을 찾아서 href로 받은 값으로 대체
-
 			actionForm.submit();
 		});
-		
-		/* $(".move").on("click", function(e){
-			e.preventDefault();
-			
-			actionForm.append("<input type='hidden' name='ano' "
-					+"value='"+$(this).attr("href")+"'>");
-			//액션 폼 요소에 ano 추가하여 클릭한 제목의 ano 전달
-			actionForm.attr("action","/alleyboard/view");
-			//기존 목록 이동 대신에 글읽기 페이지로 액션을 변경하고
-			//(view으로 변경하여 view 의 script중 ano,page 부분 전달)
-			actionForm.submit();
-			//전송
-		}); */
-
 	});
 </script>
-
-
-
-
-<%@ include file="../includes/footer.jsp"%>

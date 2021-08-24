@@ -4,6 +4,7 @@
 
 <%@ include file="../includes/header.jsp"%>
 
+
 <!-- Page content-->
 <div class="container mt-5">
 	<div class="row">
@@ -74,159 +75,154 @@
 				</section>
 			</article>
 			
-			<!-- 댓글 작성 -->
+			<!-- 리뷰 댓글작성 -->
 			<section class="mb-5">
-			<sec:authorize access='isAuthenticated()'>
 				<div class="card bg-light">
 					<div class="card-body">
-						<!-- Comment form-->
-						<form class="form_input" id="reply-form" 
-							role="form" method="post" autocomplete="off">
-							<input type="hidden" value="${alist.ano} }" name="ano" id="ano">
-							<input type="hidden" value="${alist.replyer }" name="replyer" id="replyer">
+					<div class="panel-heading">
+					<h4>* 리뷰 *</h4>
+						<!-- 리뷰 댓글작성 폼 -->
+						<form class="mb-4">
 							
-							<textarea class="form-control" rows="3"
-								placeholder="솔직한 후기를 남겨주세요..."></textarea>						
-						
-							<div class="" align="right">
-								<button type="button" id="review-submit" class="btn btn-warning btn-sm">
-								댓글등록</button>
-							</div>
+							
+							<textarea class="form-control" rows="3" name="reply" id="reply"
+								placeholder="솔직한 후기를 남겨주세요..."></textarea>
+												
 						</form>
-						<!-- 댓글 작성 종료  -->
 					</div>
-				</div>
-				</sec:authorize>
-			</section>
-			
-			<div class="col-sm-12 fix">
-				<div class="description">
-					<!-- Nav tabs -->
-					<ul class="nav product-nav">
-						<li class="active"><a data-toggle="tab" href="#description">리뷰</a></li>
-					</ul>
-					<!-- Tab panes -->
-					<div class="tab-content">
-						<div id="description" class="tab-pane fade active in" role="tabpanel">
-							<div>
-								<section class="replyList">
-									<ul>
-										<!-- 리뷰 리스트 목록이 들어갈 위치 -->
-									</ul>
-								</section>
-								<script>
-									replyList(); <!--리스트 스크립트문 실행-->
-								</script>
-							</div>
+					
+					<sec:authorize access='isAuthenticated()'>
+						<input type="hidden" value="${alist.ano}" name="ano" id="ano">
+						<input type="hidden" value="${userid}" name="userid" id="userid">
+						<input type="hidden" value="${replyDate }" name="replyDate" id="replyDate">
+						<div class="" align="right">
+							<div class="modal-footer">
+							<!-- <button id="modalModBtn" type="button" class="btn btnwarning">수정</button>
+							<button id="modalRemoveBtn" type="button" class="btn btndanger">삭제</button>
+							<button id="modalCloseBtn" type="button" class="btn btndefault">닫기</button> -->
+							<button id="addReplyBtn" type="button" class="btn btn-warning btn-sm">
+							댓글등록</button>
 						</div>
-						
+						</div>
+					</sec:authorize>
+					
+						<!-- 리뷰 댓글목록 -->
+                    	<div class="d-flex">
+                        	<div class="ms-3">
+                        		<div class="panel-body">
+                            		<ul class="chat">
+                                		<li>굿굿</li>
+                                	</ul>
+                                </div>
+                                <div class="panel-footer"></div>
+                            </div>
+                    	</div>
 					</div>
 				</div>
-			</div>
+			</section>
 		</div>
 	</div>
 </div>
 
-<!-- 댓글 수정 모달 -->
-<div id="modal">
-	<div class="modal_content">
-    	<input type="hidden" id="modalarno" name="arno">
-    	<input type="hidden" id="modalreplyer" name="replyer"> 
-        <h2>리뷰 수정</h2>   
-       	<br>
-       	
-
-		<br><br>					
-        <p class="cont">    
-			<label>댓글</label>
-			<div class="form-group">
-				<textarea class="modal_repCon" id="reply_modal" name="modal_repCon"></textarea>
-			</div>
-        </p>
-        <br>
-        
-		<button type="button" class="modal_modify_btn">수정</button>
-	    <button type='button' class='delete'>삭제</button>	         
-		<button type="button" class="modal_close_btn" >취소</button>
-        
-    </div>
-    <div class="modal_layer"></div>
-</div>
-
-
 <%@ include file="../includes/footer.jsp"%>
 
+<script type="text/javascript" src="/resources/js/alley_reply.js"></script>
 <script>
-//리뷰 리스트
-function replyList() {
-	var ano=${alist.ano};
+$(document).ready(function(){
 	
-	$.getJSON("/alist/view/replyList" + "?ano=" + ano,function(data) {
-		
-		var str= "";
-		
-		$(data).each(function() {
-			
-			str += "<li class='replyList' data-arno='" +this.arno + "'>";
-			str += "<div class='userInfo'>";
-			
-			str += "<div id='reply" + this.arno + "' class='replyContent'>" + this.reply + "</div><br />";
-			str += "<input type='hidden' class='reviewId' value=" + this.replyer + ">";
-			str += "<div class='review_bt'>";
-			str += "<b class='review_modify' id='review_modify_" + this.arno + "' data-arno='";
-			str += this.arno + "' data-id='" + this.replyer + "'>수정/삭제</b>";
-			str += "</div>";
-			str += "<div class='div_line'></div>";
-			str += "</li>";
-		});
-		
-		$("section.replyList ul").html(str);
-	})
-	
-}
-</script>
-
-<script>
-$(document).ready(function() {
 	var csrfHeaderName = "${_csrf.headerName}";
 	var csrfTokenValue = "${_csrf.token}";
 	
 	$(document).ajaxSend(function(e,xhr,options) {
-		xhr.setRequestHeader(csrdHeaderName, csrfTokenValue);
+		xhr.setRequestHeader(csrfHeaderName,csrfTokenValue);
 	});
 	
-	//리뷰 등록
-	$("review_submit").on("click",function(e) {
-		var reveiwId =$("reviewId");
-		var replyer = $("#replyer").val();
+	var addReplyBtn = $("#addReplyBtn");
+	var Reply = $("textarea[name='reply']");
+	var Replyer = $("input[name='userid']");
+	var anoValue = '<c:out value = "${alist.ano}" />';
+	
+	var replyer=null;
+    <sec:authorize access="isAuthenticated()">
+    	replyer='${pinfo.username}';
+    </sec:authorize>
+	
+	var ReplyDate = $("input[name='replyDate']");
+	
+	addReplyBtn.on("click", function(e){	
+			
+		var reply = {
+				
+			reply : Reply.val(),
+			replyer : Replyer.val(),
+			ano : anoValue
+			
+		};
 		
-		if(reviewId.val() == replyer) {
-			e.preventDefault();
-			alert("이미 리뷰를 등록 하셨습니다.");
-			return;
-		}
-		
-		e.preventDefault();
-		
-		var formObj = $("#review_form form=[role='form']");
-		var ano = $("#ano").val();
-		var reply = $("#reply").val();
-		
-		var data = {
-				ano : ano,
-				replyer : replyer,
-				reply : reply
-		}
-		
-		$.ajax({
-			url : "/alleyboard/view/registReply",
-			type : "post",
-			data : data,
-			success : function() {
-				replyList();
-				$('#reply').val("");
-			}
+		Alley_ReplyService.add(reply, function(result){
+			alert(result);
+			showList(-1);
 		});
+		
 	});
-})
+	
+	var replyUL = $(".chat");
+    // reply Unorderd List
+    
+    function showList(page){
+  	  Alley_ReplyService
+  	  			.getList(
+  	  					{
+  	  						ano : anoValue,
+  	  						page : page || 1
+  	  					},
+  	  					function(list){
+  	  						var str = "";
+  	  						if(list == null
+  	  								|| list.length == 0){
+  	  							replyUL.html("");
+  	  							return;
+  	  						}
+  	  						for(var i = 0, len = list.length || 0; i < len; i++){
+	  	  						str += "<li class='left ";
+	  							str+="clearfix' data-arno='";
+	  							str+=list[i].arno+"'>";
+	  							str += "<div><div class='header' ";
+	  							str+="><strong class='";
+	  							str+="primary-font'>";
+	  							str += list[i].replyer+ "</strong>";
+	  							str += "<small class='float-sm-right '>";
+	  							str += Alley_ReplyService.displayTime(list[i].replydate)
+								+ "</small></div>";
+	  							str += "<p>"+ list[i].reply;
+	  							str += "</p></div></li>";
+  	  						}
+  	  						replyUL.html(str);
+  	  					});
+  	  
+  	  $(".chat").on("click" , "li", function(e) {
+  		  var arno = $(this).data("arno");
+  		  console.log(arno);
+  		  
+  		  Alley_ReplyService.get(arno,function(reply){
+  			modalInputReply.val(reply.reply);
+  			modalInputReplyer.val(reply.replyer);
+  			modalInputReplyDate.val(Alley_ReplyService.displayTime(reply.replyDate)).attr("readonly","readonly");
+      	 	// 댓글 목록의 값들을 모달창에 할당.
+      	 	modal.data("arno", reply.arno);
+      		 // 표시되는 모달창에 rno 라는 이름으로 data-rno 를 저장.
+      	 	modal.find("button[id !='modalCloseBtn']").hide();
+      	 	modalModBtn.show();
+      	 	modalRemoveBtn.show();
+      	 	// 버튼 보이기 설정.
+      	 	$("#myModal").modal("show");
+        });
+  		  
+  		
+  	  });
+  	  
+    }
+  	showList(1);
+});
+	
 </script>

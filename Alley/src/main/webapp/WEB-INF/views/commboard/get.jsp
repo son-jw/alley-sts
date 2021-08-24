@@ -126,7 +126,7 @@
 
 				<div class="form-group">
 					<label>댓글 작성일</label> <input class="form-control" name="replydate"
-						value="">
+						value="replydate">
 				</div>
 			</div>
 			<div class="modal-footer">

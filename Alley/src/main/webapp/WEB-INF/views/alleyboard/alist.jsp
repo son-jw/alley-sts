@@ -4,26 +4,28 @@
 
 <%@ include file="../includes/header.jsp"%>
 
+<div class="py-5 bg-warning">
+	<div class="container">
+		<h2 class="m-0 text-center">'백종원의 골목식당'<br>전체 목록</h2>
+	</div>
+</div>
 
 <!-- Section-->
 <section class="py-5">
 	<div class="container px-4 px-lg-5 mt-5">
-
-		<div
-			class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+		<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 			<c:forEach var="alist" items="${alist }">
 				<div class="col mb-5">
-					<div>
-						<p class="a">
-							<c:out value="${alist.subtitle }" />
-						</p>
-					</div>
-					<div type="hidden" value="${alist.ano }"></div>
+				<!-- 골목이름 -->
+				<p class="a">
+					<c:out value="${alist.subtitle }" />
+				</p>
 					<div class="card h-100">
 						<!-- 음식 사진 -->
-						<a href="/alleyboard/view?ano=${alist.ano } " >
-						<img class="card-img-top"
-							src="${alist.mainimage }" style="height: 200px;" /></a>
+						<a href="/alleyboard/view?ano=${alist.ano }">
+						<img class="card-img-top" src="${alist.mainimage }"
+							style="height: 200px;" />
+						</a>
 						<!-- 식당 정보 -->
 						<div class="card-body p-4">
 							<div class="text-center">
@@ -38,13 +40,10 @@
 					</div>
 				</div>
 			</c:forEach>
-
 		</div>
 	</div>
-
 </section>
 
-<!-- Pagination -->
 <nav aria-label="Page navigation example">
 	<ul class="pagination justify-content-center">
 		<c:if test="${pageMaker.prev }">

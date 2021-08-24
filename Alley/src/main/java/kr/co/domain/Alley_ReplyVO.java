@@ -13,5 +13,7 @@ public class Alley_ReplyVO {
 	private String replyer; //댓글 작성자
 	private Date replydate;
 	private Date updatedate;
+	
+//	private String userName;//general_member 확인용
 
 }

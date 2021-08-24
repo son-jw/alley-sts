@@ -45,4 +45,34 @@
    좌 테이블은 모두 추출, 우 테이블은 일치하는 값들 추출. 로그인 창에서 입력한 사용자 계정을
    넘겨 받아서 일치하는 데이터 검색. -->
    
+   <insert id="signup">
+   		insert into general_member (userid, userpw, username, userphone, useremail
+   		useraddr1, useraddr2, useraddr3)
+   		
+   		values (#{userid} , #{userpw}, #{userName}, #{userPhone} , #{userEmail}, 
+   		#{userAddr1}, #{userAddr2}, #{userAddr3})   
+   </insert>
+   
+   <insert id="insertAuth">
+   		insert into general_member_auth(userid, auth)
+   		values (#{userid},'ROLE_USER')
+   </insert>
+   
+   <select id="CheckId" resultType="int">
+   		select count(*)
+   		from general_member
+   		where userid = #{userid}
+   </select>
+   
+   <select id="CheckEmail" resultType="int">
+   		select count(*)
+   		from general_member
+   		where useremail = #{userEmail}   
+   </select>
+   
+   <select id="CheckPhone" resultType="int">
+   		select count(*)
+   		from general_member
+   		where userphone = #{userPhone}   
+   </select>
 </mapper>

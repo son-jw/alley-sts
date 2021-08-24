@@ -3,16 +3,16 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.mapper.Alley_BoardMapper">
-
+	
+	<!-- sql include -->
 	<sql id="cri">
 		<trim prefix="(" suffix=") AND " prefixOverrides="OR">
 			<foreach item="type" collection="typeArr">
 				<trim prefix="OR">
 					<choose>
-						<when test="type=='S'.toString ()">
+						<when test="type=='S'.toString()">
 							storename like '%'||#{keyword}||'%'
 						</when>
-
 						<when test="type=='A'.toString()">
 							address like '%'||#{keyword}||'%'
 						</when>
@@ -23,10 +23,9 @@
 				</trim>
 			</foreach>
 		</trim>
-	</sql>	
+	</sql>
 	
-
-
+	<!-- main best -->
 	<select id="best1" resultType="kr.co.domain.Alley_BoardVO">
 		<![CDATA[
 			select ano,mainimage,storename,address 
@@ -61,7 +60,7 @@
 		]]>
 	</select>
 	
-	<select id="getAList"
+	<select id="getListWithPaging"
 		resultType="kr.co.domain.Alley_BoardVO">
 		<![CDATA[
 		select ano, storename, address, subtitle, mainimage
@@ -111,31 +110,10 @@
 	
 	</select>
 	
-	<select id="localList" resultType="kr.co.domain.Alley_BoardVO">
-		<![CDATA[
-			select *
-			from (
-				select rownum rn, ano, storename, address, subtitle, mainimage
-				from alley_board
-				where
-				]]>
-				<include refid="cri" />				
-				<![CDATA[
-				rownum <= #{pageNum} * #{amount}
-			)
-			where rn > (#{pageNum}-1) * #{amount}
-		]]>
-	
-	</select>
-	
-	
 	<!-- 식당 상세보기 -->
 	<select id="view" resultType="kr.co.domain.Alley_BoardVO">
 		select * from alley_board where ano=#{ano}
-	</select>
+	</select>	
 	
-	
-
-
 </mapper>
 
