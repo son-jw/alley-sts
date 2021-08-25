@@ -81,13 +81,11 @@
 				<div class="container-fluid">
 					<form class="d-flex" id="search-Form" action="/alleyboard/search"
 						method="get">
-						
-						<select type="hidden" name="type" style="display:none">							
-							<option type="hidden" name="type" value="SAT" ${pageMaker.cri.type eq "SAT"?"selected":"" }>
-								</option>
-						</select> 
-						
-						<input class="form-control me-2" type="text" name="keyword"
+
+						<select type="hidden" name="type" style="display: none">
+							<option type="hidden" name="type" value="SAT"
+								${pageMaker.cri.type eq "SAT"?"selected":"" }></option>
+						</select> <input class="form-control me-2" type="text" name="keyword"
 							value="${pageMaker.cri.keyword }"
 							placeholder="지역 또는 식당을 검색해주세요.." aria-label="Search"
 							style="width: 400px; height: 50px; font-size: 20px;" /> <input
@@ -109,15 +107,17 @@
 			<div class="collapse navbar-collapse" id="navbarNav">
 				<ul class="navbar-nav" style="padding-right: 40%;">
 					<sec:authorize access="isAuthenticated()">
-						<sec:authentication property="principal.username" var="userid" />
-						<li>안녕하세요!&nbsp; ${userid } 님</li>
+						<sec:authentication property="principal.username" var="userName" />
+						<li>안녕하세요!&nbsp; ${userName } 님</li>
 						<li>/</li>
-						<li><a class="nav-link" href="member/customLogout"> 로그아웃</a></li>
+						<li><a class="nav-link" href="/member/customLogout"> 로그아웃</a></li>
 						<li>마이페이지</li>
 					</sec:authorize>
 					<sec:authorize access="isAnonymous()">
-						<li class="nav-item"><a class="nav-link" href="/member/customLogin">로그인</a></li>
-						<li class="nav-item"><a class="nav-link" href="/member/signup">회원가입</a></li>
+						<li class="nav-item"><a class="nav-link"
+							href="/member/customLogin">로그인</a></li>
+						<li class="nav-item"><a class="nav-link"
+							href="/member/signup">회원가입</a></li>
 					</sec:authorize>
 				</ul>
 			</div>

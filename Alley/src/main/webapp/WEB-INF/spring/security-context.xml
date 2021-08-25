@@ -22,10 +22,12 @@
 		<security:intercept-url pattern="/**"
 			access="permitAll" />
 
-		<security:remember-me data-source-ref="dataSource" token-validity-seconds="604800" />
+		<security:remember-me
+			data-source-ref="dataSource" token-validity-seconds="604800" />
 
 		<security:form-login default-target-url="/"
-			login-page="/member/customLogin" login-processing-url="/member/customLogin"
+			login-page="/member/customLogin"
+			login-processing-url="/member/customLogin"
 			password-parameter="userpw" username-parameter="userid" />
 
 		<security:logout logout-url="member/customLogout"

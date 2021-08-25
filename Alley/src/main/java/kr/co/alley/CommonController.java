@@ -45,7 +45,7 @@ public class CommonController {
 		vo.setUserpw(pw);
 		gms.signup(vo, avo);
 
-		return "/member/customLogin";
+		return "/customLogin";
 	}
 
 	@GetMapping("/customLogin")
@@ -80,7 +80,7 @@ public class CommonController {
 	// 이메일중복체크
 	@ResponseBody
 	@PostMapping("/CheckEmail")
-	public int emCheck(General_MemberVO vo) throws Exception {
+	public int CheckEmail(General_MemberVO vo) throws Exception {
 		int result = gms.CheckEmail(vo);
 		return result;
 	}
@@ -88,7 +88,7 @@ public class CommonController {
 	// 핸드폰 중복 체크
 	@ResponseBody
 	@PostMapping("/CheckPhone")
-	public int phCheck(General_MemberVO vo) throws Exception {
+	public int CheckPhone(General_MemberVO vo) throws Exception {
 		int result = gms.CheckPhone(vo);
 		return result;
 	}

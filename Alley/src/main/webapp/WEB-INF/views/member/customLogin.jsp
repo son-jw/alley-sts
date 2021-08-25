@@ -12,7 +12,7 @@
 				<h2>${error }</h2>
 				<h2>${logout }</h2>
 
-				<form method="post" action="member/customLogin">
+				<form id="login-form" method="post" action="/member/customLogin">
 					<input type="hidden" name="${_csrf.parameterName }"
 						value="${_csrf.token }" />
 					<div class="form-group" style="padding-left: 35%;">
@@ -27,7 +27,7 @@
 						<input type="checkbox" name="remember-me">자동 로그인
 					</div>
 					<div class="form-group">
-						<input type="submit" value="login">
+						<input type="submit" value="customLogin">
 					</div>
 					
 				</form>
