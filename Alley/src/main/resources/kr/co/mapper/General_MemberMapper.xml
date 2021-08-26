@@ -46,11 +46,13 @@
    넘겨 받아서 일치하는 데이터 검색. -->
    
    <insert id="signup">
-   		insert into general_member (userid, userpw, username, userphone, useremail
+   	
+   		insert into general_member (userid, userpw, username, userphone, useremail, 
    		useraddr1, useraddr2, useraddr3)
    		
-   		values (#{userid} , #{userpw}, #{userName}, #{userPhone} , #{userEmail}, 
-   		#{userAddr1}, #{userAddr2}, #{userAddr3})   
+   		values (#{userid}, #{userpw}, #{userName}, #{userPhone}, #{userEmail}, 
+   		#{userAddr1}, #{userAddr2}, #{userAddr3})
+   		  
    </insert>
    
    <insert id="insertAuth">

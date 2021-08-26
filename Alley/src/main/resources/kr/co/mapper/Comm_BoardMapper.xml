@@ -71,7 +71,7 @@
 		<![CDATA[
       	select bno, title, content, writer, regdate, updatedate, replycnt
       	from
-      	(select /*+INDEX_DESC(comm_board pk_comm_board) */ 
+      	(select /*+INDEX_DESC(comm_board pk_board) */ 
       	rownum rn, bno, title, content, writer, regdate, 
      	updatedate , replycnt
       	from comm_board 

@@ -7,6 +7,15 @@
 <!doctype html>
 <%@ include file="../includes/header.jsp"%>
 
+<div class="py-5 bg-info">
+	<div class="container">
+		<h2 class="m-0 text-center">자유게시판</h2>
+		<div class="" align="right">
+			<button id="regBtn" style="color: green;">글 쓰기</button>
+		</div>
+	</div>
+</div>
+
 <!-- table -->
 <table class="table">
 	<thead>
@@ -47,8 +56,7 @@
 	<div>
 		<div class="col-lg-12">
 			<form id="searchForm" action="/commboard/list" method="get">			
-				&nbsp;&nbsp;&nbsp; 
-				<select name="type">
+				&nbsp;&nbsp;&nbsp; <select name="type">
 					<option value="" ${pageMaker.cri.type==null?"selected":"" }>
 					--</option>	
 					<option value="T" ${pageMaker.cri.type eq "T"?"selected":"" }>
@@ -76,7 +84,7 @@
 	</div>
 <!-- 검색 상자 끝 -->
 		
-<div class="card-header py-3" align="right">
+
 
 	<nav aria-label="Page navigation example">
 		<ul class="pagination justify-content-center">
@@ -106,8 +114,6 @@
 		<input type="hidden" name="type" value="${pageMaker.cri.type }">
 		<input type="hidden" name="keyword" value="${pageMaker.cri.keyword }">
 	</form>
-	<button id="regBtn" style="color: green;">글 쓰기</button>
-</div>
 
 <div class="modal" tabindex="-1" id="myModal">
 	<div class="modal-dialog">

@@ -21,7 +21,7 @@
 				</div>
 
 				<div class="form-group">
-					<label>제목</label><input class="form-control" name="title" 
+					<label>글 제목</label> <input class="form-control" name='title'
 						value='<c:out value="${cb.title }"/>' readonly="readonly">
 				</div>
 
@@ -35,35 +35,32 @@
 					<label>작성자</label> <input class="form-control" name="writer"
 						value='<c:out value="${cb.writer }"/>' readonly="readonly">
 				</div>
-
+				
 				<sec:authentication property="principal" var="pinfo" />
-				<!-- 프린서펄 정보를 pinfo 라는 이름으로 jsp 에서 이용. -->
-				<sec:authorize access="isAuthenticated()">
-					<!-- 인증된 사용자만 허가 -->
-					<c:if test="${pinfo.username eq cb.writer }">
-						<!-- 인증되었으면서 작성자가 본인 일때 수정 버튼 표시 -->
-						<button data-oper="modify" class="btn btn-warning">수정</button>
-					</c:if>
-				</sec:authorize>
-
-
-				<button data-oper="list" class="btn btn-info">목록</button>
+					<!-- 프린서펄 정보를 pinfo라는 이름으로 jsp에서 이용 -->
+					<sec:authorize access="isAuthenticated()">
+						<!-- 인증된 사용자만 허가 -->
+						<c:if test="${pinfo.username eq cb.writer }">
+							<!-- 인증되었으면서 작성자가 본인일 때, 수정 버튼 표시 -->
+							<button data-oper="modify" class="btn btn-warning">수정</button>
+						</c:if>
+					</sec:authorize>
+							<button data-oper="list" class="btn btn-info">목록</button>
 
 				<form id='operForm' action="/commboard/modify" method="get">
-					<input type='hidden' id='bno' name='bno' value="${cb.bno }" /> <input
-						type="hidden" name="pageNum" value="${cri.pageNum }" /> <input
-						type="hidden" name="amount" value="${cri.amount }" /> <input
-						type="hidden" name="type" value="${cri.type }" /> <input
-						type="hidden" name="keyword" value="${cri.keyword }" />
+					<input type='hidden' id='bno' name='bno' value="${cb.bno }" />
+					<input type="hidden" name="pageNum" value="${cri.pageNum }" />
+					<input type="hidden" name="amount" value="${cri.amount }" />
+					<input type="hidden" name="type" value="${cri.type }" />
+					<input type="hidden" name="keyword" value="${cri.keyword }" />
 				</form>
 			</div>
 		</div>
 	</div>
 </div>
 
-
 <!-- 첨부파일 시작 -->
-<br />
+<br/>
 <div class="row">
 	<div class="col-lg-12">
 		<div class="panel panel-default">
@@ -78,7 +75,6 @@
 </div>
 <!-- 첨부파일 끝 -->
 
-
 <!-- 댓글 목록 시작 -->
 <br />
 <div class="row">
@@ -86,16 +82,18 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<i class="fa fa-comments fa-fw"></i>댓글 목록
+				
 				<sec:authorize access="isAuthenticated()">
-					<button id="addReplyBtn" class="btn btn-primary btn-xs float-right">
-						댓글 쓰기</button>
+				<button id="addReplyBtn" class="btn btn-primary bts-xs float-right">
+					댓글 작성</button>
 				</sec:authorize>
+				
 			</div>
 			<br />
 			<div class="panel-body">
 				<ul class="chat">
 					<li>굿굿</li>
-
+			
 				</ul>
 			</div>
 			<div class="panel-footer"></div>
@@ -126,7 +124,7 @@
 
 				<div class="form-group">
 					<label>댓글 작성일</label> <input class="form-control" name="replydate"
-						value="replydate">
+						value="">
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -145,19 +143,19 @@
 <script type="text/javascript" src="/resources/js/reply.js"></script>
 <script>
 	$(document).ready(function(){
-		var csrfHeaderName = "${_csrf.headerName}";
-		var csrfTokenValue="${_csrf.token}";
-		
-		$(document).ajaxSend(function(e,xhr,options){
-			xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
-		});
-		
-		var operForm = $("#operForm");/* 문서중 form 요소를 찾앙서 변수에 할당. */
-	    $('button[data-oper="modify"]').on("click",function(e){
+		 var csrfHeaderName="${_csrf.headerName}";
+		 var csrfTokenValue="${_csrf.token}";
+		 
+		 $(document).ajaxSend(function(e,xhr,options){
+			 xhr.setRequestHeader(csrfHeaderName,csrfTokenValue);
+		 });
+		 
+		 var operForm = $("#operForm");
+	      $('button[data-oper="modify"]').on("click",function(e){
 	         /* 버튼이 클릭된다면 아래 함수 수행, e라는 이벤트 객체를 전달하면서 */
 	         operForm.attr("action", "/commboard/modify").submit();
 	      });
-	      
+	
 	      $('button[data-oper="list"]').on("click",function(e){
 	         /* 버튼이 클릭된다면 아래 함수 수행, e라는 이벤트 객체를 전달하면서 */
 	         operForm.find("#bno").remove();
@@ -165,12 +163,11 @@
 	      });
 	      
 	      var bnoValue = '<c:out value = "${cb.bno}" />';
-	      
-	      var replyer=null;
-	      <sec:authorize access="isAuthenticated()">
+	      var replyer = null;
+	      <sec:authorize access = "isAuthenticated()">
 	      	replyer='${pinfo.username}';
 	      </sec:authorize>
-	      
+	     
 	      var modal = $("#myModal");
 	      //댓글용 모달
 	      var modalInputReplyDate = modal.find("input[name='replydate']");
@@ -185,11 +182,10 @@
 	      $("#addReplyBtn").on("click",function(e) {
 	    	  //댓글쓰기 버튼 클릭시
 	    	  modal.find("input").val("");
-	    	  
-	    	  modal.find("input[name='replyer']").val(replyer);
-	          modal.find("input[name='replyer']").attr("readonly","readonly");
-	    	  
 	    	  //모달창의 모든 입력창 초기화
+	    	  modal.find("input[name='replyer']").val(replyer);
+	    	  modal.find("input[name='replyer']").attr("readonly","readonly");
+	    	  
 	    	  modalInputReplyDate.closest("div").hide();
 	    	  //closest : 선택요소와 가장 가까운 요소를 지정
 	    	  modal.find("button[id != 'modalCloseBtn']").hide();
@@ -207,7 +203,13 @@
 	    	  var reply = {
 	    			  reply : modalInputReply.val(),
 	    			  replyer : modalInputReplyer.val(),
-	    			  bno : bnoValue}; //ajax로 전달한 reply 객체 선언 과 할당
+	    			  bno : bnoValue
+	    	  }; //ajax로 전달한 reply 객체 선언 과 할당
+	    	  
+	    	  var reply_con = modalInputReply.val();
+	    	  	console.log("reply_con:" + reply_con);
+	    	  	if(reply_con == "")return;
+	    	  
 	    	  Comm_ReplyService.add(reply, function(result) {
 	    		  alert(result);
 	    		  modal.find("input").val("");//초기화
@@ -217,26 +219,26 @@
 	      });
 	      
 	      modalModBtn.on("click",function(e){
-	    	  var ogReplyer = modalInputReplyer.val();
+	    	  var originalReplyer = modalInputReplyer.val();
 	    	  
 	    	  var reply = {
 	    			  rno : modal.data("rno"),
 	    			  reply : modalInputReply.val(),
-	    			  replyer : ogReplyer
+	    			  replyer : originalReplyer
 	    	  };
 	    	  
-	    	  if(!replyer) {
-	    		  alert("로그인 후 수정해 주세요.");
+	    	  if(!replyer){
+	    		  alert("로그인 후 수정 가능");
 	    		  modal.modal("hide");
 	    		  return;
 	    	  }
 	    	  
-	    	  if(replyer != ogReplyer) {
-	    		  alert("자신이 쓴 댓글만 수정 가능합니다.");
+	    	  if(replyer != originalReplyer){
+	    		  alert("자신이 작성한 댓글만 수정 가능");
 	    		  modal.modal("hide");
 	    		  return;
 	    	  }
-	    	  
+	    	  	    	  
 	    	  Comm_ReplyService.update(reply, function(result){
 	    		  alert(result);
 	    		  modal.modal("hide");
@@ -245,22 +247,23 @@
 	      });
 	      
 	      modalRemoveBtn.on("click",function(e){
-	    	  var ogReplyer = modalInputReplyer.val();
-	    	  
 	    	  var rno = modal.data("rno");
 	    	  
-	    	  if(!replyer) {
-	    		  alert("로그인 후 삭제해 주세요.");
+	    	  var originalReplyer = modalInputReplyer.val();
+	    	  
+	    	  if(!replyer){
+	    		  alert("로그인 후 삭제 가능");
 	    		  modal.modal("hide");
 	    		  return;
 	    	  }
 	    	  
-	    	  if(replyer != ogReplyer) {
-	    		  alert("자신이 쓴 댓글만 삭제 가능합니다.");
+	    	  if(replyer != originalReplyer){
+	    		  alert("자신이 작성한 댓글만 삭제 가능");
 	    		  modal.modal("hide");
 	    		  return;
 	    	  }
-	    	  Comm_ReplyService.remove(rno, ogReplyer, function(result){
+	    	  
+	    	  Comm_ReplyService.remove(rno, originalReplyer, function(result){
 	    		  alert(result);
 	    		  modal.modal("hide");
 	    		  showList(-1);
@@ -272,9 +275,8 @@
 	    	  console.log(rno);
 	    	  Comm_ReplyService.get(rno, function(reply){
 	    		  modalInputReply.val(reply.reply);
-	    		  modalInputReplyer.val(reply.replyer)
-	    		  .attr("readonly","readonly");
-	    		  modalInputReplyDate.val(Comm_ReplyService.displayTime(reply.replydate))
+	    		  modalInputReplyer.val(reply.replyer).attr("readonly","readonly");
+	    		  modalInputReplyDate.val(Comm_ReplyService.displayTime(reply.replyDate))
 	    		  			.attr("readonly","readonly");
 	    		  modal.data("rno",reply.rno);
 	    		  modal.find("button[id !='modalCloseBtn']").hide();
@@ -315,7 +317,7 @@
 	    			str +="primary-font'>";
 	    			str += list[i].replyer+ "</strong>";
 	    			str += "<small class='float-sm-right '>";
-	    			str += Comm_ReplyService.displayTime(list[i].replydate) + "</small></div>";
+	    			str += Comm_ReplyService.displayTime(list[i].replyDate) + "</small></div>";
 	    			str += "<p>" + list[i].reply;
 	    			str += "</p></div></li>";
 	    		}
@@ -373,14 +375,12 @@
 			showList(pageNum);
 		});
 		
-		//첨부파일 목록 표시. 즉시 실행 함수로 사용함
-		
-		// 첨부파일 목록 표시. 즉시 실행 함수.
+		//첨부파일 목록
 		(function(){
-			var bno='<c:out value="${cb.bno}"/>';
-			// 화면상에 공유된 bno 값 가져와 사용 준비.
+			var bno = '<c:out value="${cb.bno}"/>';
+			
 			$.getJSON("/commboard/getAttachList",{bno:bno}, function(arr){
-						console.log(arr);										
+						console.log(arr);
 						var str="";
 						
 						$(arr).each(function(i,attach){
@@ -390,22 +390,20 @@
 							str+=attach.fileName+"' data-type='";
 							str+=attach.fileType+"'><div>";
 							str+="<img src='/resources/img/attach.png' width='20'>";
-							str+="<span>&nbsp;"+attach.fileName+"</span><br/> ";											
+							str+="<span> &nbsp;"+attach.fileName+"</span><br/>";
 							str+="</div></li>";
 						});
 						$(".uploadResult ul").html(str);
-					});
+			});
 		})();
-		//첨부파일 클릭시 다운로드 처리 스크립트.
-		$(".uploadResult").on("click","li",function(e) {
+		
+		$(".uploadResult").on("click", "li", function(e){
 			console.log("download file");
 			var liobj = $(this);
-			var path = encodeURIComponent(liobj.data("path")
+			var path=encodeURIComponent(liobj.data("path")
 					+"/"+liobj.data("uuid")+"_"
 					+liobj.data("filename"));
-			// C:\uplo
-			self.location="/download?fileName="+path;
-			
+			self.location="/download?fileName="+path;	
 		});
 }); // end document ready
 </script>

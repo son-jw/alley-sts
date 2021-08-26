@@ -38,5 +38,22 @@
 	<context:component-scan base-package="kr.co.service"> 
 	</context:component-scan>
 	<!-- 스프링 프레임워크에서 해당 패키지를 살펴보고, 컴포넌트와 관련 어노테이션을 만나면 그 부분을 자동 객체화 처리 -->
+	
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    <property name="host" value="smtp.gmail.com"/>
+    <property name="port" value="587" />
+    <property name="username" value="sjuspring5364@gmail.com"/>
+    <property name="password" value="8585359a!@"/>
+    <property name="javaMailProperties">
+        <props>
+				<prop key="mail.transport.protocol">smtp</prop>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.debug">true</prop>
+			</props>
+    </property>
+</bean>
+	
+	
 
 </beans>

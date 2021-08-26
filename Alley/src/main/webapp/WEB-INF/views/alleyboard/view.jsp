@@ -83,11 +83,8 @@
 					<h4>* 리뷰 *</h4>
 						<!-- 리뷰 댓글작성 폼 -->
 						<form class="mb-4">
-							
-							
 							<textarea class="form-control" rows="3" name="reply" id="reply"
-								placeholder="솔직한 후기를 남겨주세요..."></textarea>
-												
+								placeholder="솔직한 후기를 남겨주세요..."></textarea>										
 						</form>
 					</div>
 					
@@ -96,13 +93,8 @@
 						<input type="hidden" value="${userid}" name="userid" id="userid">
 						<input type="hidden" value="${replyDate }" name="replyDate" id="replyDate">
 						<div class="" align="right">
-							<div class="modal-footer">
-							<!-- <button id="modalModBtn" type="button" class="btn btnwarning">수정</button>
-							<button id="modalRemoveBtn" type="button" class="btn btndanger">삭제</button>
-							<button id="modalCloseBtn" type="button" class="btn btndefault">닫기</button> -->
 							<button id="addReplyBtn" type="button" class="btn btn-warning btn-sm">
 							댓글등록</button>
-						</div>
 						</div>
 					</sec:authorize>
 					
@@ -124,6 +116,36 @@
 	</div>
 </div>
 
+<!-- 댓글 수정/삭제 모달 시작 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<input type="hidden" value="${arno}" name="arno" id="arno">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myModalLabel">리뷰 수정</h4></div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>댓글</label>
+					<input class="form-control" name="reply" value="reply">
+				</div>
+				<div class="form-group">
+					<label>댓글 작성일</label>
+					<input class="form-control" name="replyDate" value="replyDate">
+				</div>
+			</div>
+			
+			<div class="modal-footer">
+				<button id="modalModBtn" type="button" class="btn btn-primary">수정</button>
+				<button id="modalRemoveBtn" type="button" class="btn btn-primary">삭제</button>
+				<button id="modalCloseBtn" type="button" class="btn btn-primary">취소</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 댓글 수정/삭제 모달 끝 -->
+
+
 <%@ include file="../includes/footer.jsp"%>
 
 <script type="text/javascript" src="/resources/js/alley_reply.js"></script>
@@ -137,20 +159,16 @@ $(document).ready(function(){
 		xhr.setRequestHeader(csrfHeaderName,csrfTokenValue);
 	});
 	
+	
+	// 댓글등록
 	var addReplyBtn = $("#addReplyBtn");
 	var Reply = $("textarea[name='reply']");
 	var Replyer = $("input[name='userid']");
 	var anoValue = '<c:out value = "${alist.ano}" />';
-	
-	var replyer=null;
-    <sec:authorize access="isAuthenticated()">
-    	replyer='${pinfo.username}';
-    </sec:authorize>
-	
 	var ReplyDate = $("input[name='replyDate']");
 	
-	addReplyBtn.on("click", function(e){	
-			
+	addReplyBtn.on("click", function(e){
+		
 		var reply = {
 				
 			reply : Reply.val(),
@@ -166,63 +184,173 @@ $(document).ready(function(){
 		
 	});
 	
+	// 댓글목록 띄우기
 	var replyUL = $(".chat");
-    // reply Unorderd List
-    
     function showList(page){
   	  Alley_ReplyService
-  	  			.getList(
-  	  					{
-  	  						ano : anoValue,
-  	  						page : page || 1
-  	  					},
-  	  					function(list){
-  	  						var str = "";
-  	  						if(list == null
-  	  								|| list.length == 0){
-  	  							replyUL.html("");
-  	  							return;
-  	  						}
-  	  						for(var i = 0, len = list.length || 0; i < len; i++){
-	  	  						str += "<li class='left ";
-	  							str+="clearfix' data-arno='";
-	  							str+=list[i].arno+"'>";
-	  							str += "<div><div class='header' ";
-	  							str+="><strong class='";
-	  							str+="primary-font'>";
-	  							str += list[i].replyer+ "</strong>";
-	  							str += "<small class='float-sm-right '>";
-	  							str += Alley_ReplyService.displayTime(list[i].replydate)
-								+ "</small></div>";
-	  							str += "<p>"+ list[i].reply;
-	  							str += "</p></div></li>";
-  	  						}
-  	  						replyUL.html(str);
-  	  					});
-  	  
-  	  $(".chat").on("click" , "li", function(e) {
-  		  var arno = $(this).data("arno");
-  		  console.log(arno);
-  		  
-  		  Alley_ReplyService.get(arno,function(reply){
-  			modalInputReply.val(reply.reply);
-  			modalInputReplyer.val(reply.replyer);
-  			modalInputReplyDate.val(Alley_ReplyService.displayTime(reply.replyDate)).attr("readonly","readonly");
-      	 	// 댓글 목록의 값들을 모달창에 할당.
-      	 	modal.data("arno", reply.arno);
-      		 // 표시되는 모달창에 rno 라는 이름으로 data-rno 를 저장.
-      	 	modal.find("button[id !='modalCloseBtn']").hide();
-      	 	modalModBtn.show();
-      	 	modalRemoveBtn.show();
-      	 	// 버튼 보이기 설정.
-      	 	$("#myModal").modal("show");
-        });
-  		  
-  		
-  	  });
-  	  
+  	  			.getList({
+  	  				ano : anoValue,
+  	  				page : page || 1
+  	  			},
+  	  		function(replyCnt, list){
+  	  			console.log("replyCnt : " + replyCnt);
+  	  				if(page == -1){
+  	  					pageNum = Math.ceil(replyCnt/10.0);
+  	  					console.log("page: " + pageNum);
+  	  					showList(pageNum);
+  	  					
+  	  					return;
+  	  				}
+  	  				var str = "";
+  	  				if(list == null || list.length == 0){
+  	  					replyUL.html("");
+  	  					
+  	  					return;
+  	  				}
+	  	  			for(var i = 0, len = list.length || 0; i < len; i++){
+		  	  			str += "<li class='left ";
+		  				str += "clearfix' data-arno='";
+		  				str += list[i].arno+"'>";
+		  				str += "<div><div class='header' ";
+		  				str += "><strong class='reviewid' ";
+		  				str += "primary-font'>";
+		  				str += list[i].replyer+ "</strong>";
+		  				str += "<small class='float-sm-right '>";
+		  				str += Alley_ReplyService.displayTime(list[i].replyDate) + "</small></div>";
+		  				str += "<p>"+ list[i].reply + "</p><br>";
+		  				str += "<button class='btn btn-outline-danger btn-sm' type='button' id='modifyBtn' data-arno='" + list[i].arno + "' data-id='" + list[i].replyer + "'>수정/삭제</button>";
+		  				str += "</div></li>";
+	  	  			}
+	  	  			
+	  	  			replyUL.html(str);
+	  	  			showReplyPage(replyCnt);
+	  	  	});
     }
   	showList(1);
+  	
+  	// 리뷰 댓글 페이징
+  	var pageNum = 1;
+  	var replyPageFooter = $(".panel-footer");
+  	
+  	function showReplyPage(replyCnt){
+  		var endNum = Math.ceil(pageNum / 10.0) * 10;
+  		var startNum = endNum - 9;
+  		var prev = startNum != 1;
+  		var next = false;
+  		
+  		if(endNum * 10 >= replyCnt){
+  			endNum = Math.ceil(replyCnt / 10.0);
+  		}
+  		if(endNum * 10 < replyCnt){
+  			next = true;
+  		}
+  		var str = "<ul class='pagination";
+		str += " justify-content-center'>";
+		if(prev){
+			str += "<li class='page-item'><a ";
+			str += "class='page-link' href='";
+			str += (startNum - 1);
+			str += "'>이전</a></li>";
+		}
+		for(var i = startNum; i <= endNum; i++){
+			var active = pageNum == i? "active" : "";
+			str += "<li class='page-item" + active
+			+"'><a class='page-link' ";
+			str += "href='"+i+"'>"
+			+ i + "</a></li>";
+		}
+		if(next){
+			str += "<li class='page-item'>";
+			str += "<a class='page-link' href='";
+			str += (endNum + 1) + "'>다음</a></li>";
+		}
+		str += "</ul>";
+		console.log(str);
+		replyPageFooter.html(str);
+	}
+  	
+  	replyPageFooter.on("click", "li a", function(e){
+		e.preventDefault();
+		var targetPageNum = $(this).attr("href");
+		pageNum = targetPageNum;
+		showList(pageNum);
+	});
+  	
+  	// 수정/삭제 모달창 띄우기
+  	var modal = $("#myModal");
+  	var modalInputReply = modal.find("input[name='reply']");
+  	var modalInputReplyDate = modal.find("input[name='replyDate']");
+  	var modalModBtn = $("#modalModBtn");
+  	var modalRemoveBtn = $("#modalRemoveBtn");
+  	var modalCloseBtn = $("#modalCloseBtn");
+  	
+  	
+  	$(".chat").on("click","button", function(e) {
+  		
+  		var arno = $(this).data("arno");
+  		var reviewid = $(this).data("id");
+		var userid = $("#userid").val();
+  		
+		console.log(arno);
+		
+		if(!userid){
+			alert("로그인 후 수정 가능합니다.");
+			return;
+		}
+		
+		if(reviewid != userid){
+			alert("자신이 쓴 댓글만 수정 가능합니다.");
+			return;
+		}
+		
+		Alley_ReplyService.get(arno,function(reply){
+			  	
+	  		modalInputReply.val(reply.reply);
+	  		modalInputReplyDate.val(Alley_ReplyService.displayTime(reply.replyDate))
+	  			.attr("readonly","readonly");
+	  			
+	  		modal.data("arno",reply.arno);
+	  		modalCloseBtn.show();
+	  		modalModBtn.show();// 등록 버튼은 보여라.
+	  		modalRemoveBtn.show();
+	  		$("#myModal").modal("show");// 모달 표시.
+		});		
+	});
+  	
+  	$("#modalCloseBtn").on("click",function(e) {
+  	  modal.modal("hide");
+    });
+  	
+  	// 리뷰 댓글수정
+  	modalModBtn.on("click",function(e){
+  		
+  		var reply = {
+  				
+  				arno : modal.data("arno"),
+  				reply : modalInputReply.val(),
+  				
+  		};
+  		
+  		Alley_ReplyService.update(reply, function(result){
+  			alert(result);
+  			modal.modal("hide");
+  			showList(pageNum);	
+  		});
+  	});
+  	
+  	//  리뷰 댓글삭제
+  	modalRemoveBtn.on("click",function(e){
+  		
+  		var arno = modal.data("arno");
+  		
+  		console.log(arno);
+  		
+  		Alley_ReplyService.remove(arno, function(result){
+  			alert(result);
+  			modal.modal("hide");
+  			showList(pageNum);
+  		});	
+  	});
 });
 	
 </script>
